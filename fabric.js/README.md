@@ -1,17 +1,17 @@
-# fabric-client
-fabric-client is a Node.js Hyperledger Fabric blockchain client that allows transactions to be sent to the blockchain via a REST API or a NATS listener.  The fabric-client works with the fhir-data smart contract to provide storage of FHIR patient resources in the blockchain.
+# fabric.js
+fabric.js is a Node.js Hyperledger Fabric blockchain client that allows transactions to be sent to the blockchain via a REST API or a NATS subscriber.  fabric.js works with the fhir-data smart contract to provide storage of FHIR patient resources in the blockchain.
 
 ## Pre-requisites
-The fabric-client requires Node.js and a Hyperledger Fabric to connect to.  
+fabric.js requires Node.js and a Hyperledger Fabric instance to connect to.  
 - Install [Node.js](https://nodejs.org)
   
-If you don't have a Hyperledger Fabric instance and would like to install the Hyperledger Fabric test-network on your local machine, you can follow the "testing with test-network" instructions below.
+If you don't have a Hyperledger Fabric instance and would like to install the Hyperledger Fabric test-network on your local machine, you can follow the "Test with test-network" instructions below.
 
-## Clone fabric-client
+## Clone connect-clients
 ```shell
-git clone https://github.com/ccorley/fabric-client.git
+git clone https://github.com/LinuxForHealth/connect-clients.git
 ```
-The fabric-client repo contains fhir-data.tar.gz which is a Hyperledger Fabric Typescript contract for storing FHIR-R4 Patient records in the blockchain.  Install this contract in your Hyperledger Fabric network, or follow the instructions below to install it in a test-network instance.
+The connect-clients/fabric.js directory contains fhir-data.tar.gz which is a Hyperledger Fabric Typescript contract for storing FHIR-R4 Patient records in the blockchain.  Install this contract in your Hyperledger Fabric network, or follow the instructions below to install it in a test-network instance.
 
 ## Test with test-network
 The fabric client can be tested using a local Hyperledger Fabric test-network instance.  Follow the steps below to set up test-network on your local machine.
@@ -28,7 +28,7 @@ cd fabric-samples/test-network
 ### Copy the contract to the test-network
 Copy the contract to the test-network directory.  It will be installed in later step.
 ```shell
-cp <fabric-client-path>/fabric-client/fhir-data.tar.gz .
+cp <connect-clients-path>/connect-clients/fabric.js/fhir-data.tar.gz .
 ```
 
 ### Install the contract
@@ -99,7 +99,6 @@ You should see a result like:
 ```
 
 #### Commit the chaincode definition to the channel
-
 Check the approvals:
 ```shell
 peer lifecycle chaincode checkcommitreadiness --channelID channel1 --name fhir-data --version 1.0 --sequence 1 --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --output json
@@ -133,12 +132,12 @@ Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Ap
 ```
 
 ## Configure the client
-Copy your connection json to your fabric-client/conf directory.  Example for test-network:
+Copy your connection json to your connect-clients/fabric.js/conf directory.  Example for test-network:
 ```shell
 cd test-network
-cp organizations/peerOrganizations/org1.example.com/connection-org1.json <fabric-client-path>/fabric-client/conf
+cp organizations/peerOrganizations/org1.example.com/connection-org1.json <connect-clients-path>/connect-clients/fabric.js/conf
 ```
-You can also edit the fabric-client config.json in fabric-client/conf and adjust the settings for your fabric, but you should be able to use the configuration with test-network without changes.  Please see the table below if you do need to make changes:
+You can also edit the fabric.js config.json in fabric.js/conf and adjust the settings for your fabric, but you should be able to use the configuration with test-network without changes.  Please see the table below if you do need to make changes:
 
 | Setting | Example | Description |
 | ------- | ------- | ----------- |
@@ -163,8 +162,10 @@ You can also edit the fabric-client config.json in fabric-client/conf and adjust
 
 ## Start the client
 ```shell
-cd fabric-client
+cd connect-clients/fabric.js
 node.js server.js
 ```
 
-That's it - you're ready to send FHIR Patient transactions to the REST API and store them in your blockchain!
+That's it - you're ready to send FHIR Patient transactions to the fabric.js REST API and store them in your blockchain!
+
+Note:  LinuxForHealth connect takes advantage of the fabric.js NATS subscriber integration and does not directly use the fabric.js REST API.  The NATS subscriber approach is the preferred method of integration for external services.
