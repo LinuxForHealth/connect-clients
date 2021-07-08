@@ -30,26 +30,26 @@ setup().then(() => {
 })
 
 // GET the record identified by the id in the request query
-app.get('/patient', (req, res) => {
-    req.body = { "fcn": "queryPatient", "args": [ req.query.id ] }
+app.get('/fhir/:resource_type', (req, res) => {
+    req.body = { "fcn": "queryResource", "args": [ req.query.id ] }
     sendTransactionHTTP(req, res)
 })
 
 // POST the record using the JSON in the request body
-app.post('/patient', (req, res) => {
-    req.body = { "fcn": "addPatient", "args": [ req.body.id, req.body] }
+app.post('/fhir/:resource_type', (req, res) => {
+    req.body = { "fcn": "addResource", "args": [ req.body.id, req.body ] }
     sendTransactionHTTP(req, res)
 })
 
 // PUT the record using the JSON in the request body
-app.put('/patient', (req, res) => {
-    req.body = { "fcn": "replacePatient", "args": [ req.body.id, req.body] }
+app.put('/fhir/:resource_type', (req, res) => {
+    req.body = { "fcn": "replaceResource", "args": [ req.body.id, req.body ] }
     sendTransactionHTTP(req, res)
 })
 
 // PATCH the record using the JSON in the request body
-app.patch('/patient', (req, res) => {
-    req.body = { "fcn": "updatePatient", "args": [ req.body.id, req.body] }
+app.patch('/fhir/:resource_type', (req, res) => {
+    req.body = { "fcn": "updateResource", "args": [ req.body.id, req.body ] }
     sendTransactionHTTP(req, res)
 })
 
@@ -202,25 +202,26 @@ async function handleMessages (sub) {
         let lfh_msg = JSON.parse(new TextDecoder().decode(msg.data))
         let lfh_data_str = Buffer.from(lfh_msg.data, 'base64').toString('utf-8')
         let { uuid, operation, data_format } = lfh_msg
-        if (data_format === 'FHIR-R4_PATIENT') {
+        if (data_format.startsWith('FHIR-R4_')) {
             switch (operation) {
                 default:
                 case 'POST':
-                    fcn = 'addPatient'
+                    fcn = 'addResource'
                     break;
                 case 'PUT':
-                    fcn = 'replacePatient'
+                    fcn = 'replaceResource'
                     break;
                 case 'PATCH':
-                    fcn = 'updatePatient'
+                    fcn = 'updateResource'
                     break;
                 case 'GET':
-                    fcn = 'queryPatient'
+                    fcn = 'queryResource'
                     break;
             }
         } else {
             console.log(`Unsupported data format ${data_format}`)
         }
+
         if (fcn) {
             try {
                 await sendTransaction(fcn,  [ uuid, lfh_data_str ])
