@@ -6,7 +6,6 @@ services:
     image: mysql:8.0.15
     ports:
         - "3306:3306"
-    command: --init-file  /Users/henryhbk/gitclones/jomis_lfh/database scripts/create_demo_database.sql
     volumes:
        - ./database-scripts:/docker-entrypoint-initdb.d
     environment:

@@ -17,7 +17,7 @@ class InsuranceFiller:
     def doFill(self):
         global session
         global types
-        with open('database scripts/insurance.txt', newline='') as insurance_companies:
+        with open('database-scripts/insurance.txt', newline='') as insurance_companies:
             insuranceReader = csv.reader(insurance_companies, delimiter='\t')
             headers = next(insuranceReader, None)
             for payer in insuranceReader:
