@@ -5,9 +5,8 @@
 ### this part of the tutorial is to use the administrative (billing) data in the tutorial database.
 In the database we include several tables and classes in python that represent these adminiatrative data elements. The administrative data is arranged slightly hierarchically, similar to the order of the clinical workflow.
 
-the code for this section is in [billing.py] (billing.py) which you should run 
-
-All the administrative type data is handled by [ADTDao.py] (ADTDao.py). In this case the *Admission* class is the first item to select. You should fetch 
+the code for this section is in [billing.py](billing.py) which you should run  
+All the administrative type data is handled by [ADTDao.py](ADTDao.py). In this case the *Admission* class is the first item to select. You should fetch
 the admissions for the patient (the admissions are mapped via the *subject_id* field). The admissions have an id that indexes into the other
 data via the HADM_ID (Hospital Admission ID) field.
 
