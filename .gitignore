@@ -1,3 +1,8 @@
+# IDE configurations
+.idea
+*.iml
+# OS Specific
+.DS_Store
 
 *.iml
 .idea/inspectionProfiles/profiles_settings.xml
