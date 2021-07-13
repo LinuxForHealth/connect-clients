@@ -92,6 +92,17 @@ Note: of course you will need to edit the database url *DatabaseUtil.createConne
 ## Running
 Assuming you got the docker stuff above launched, you now need to run EntryPoint.py to start the application. It will launch a desktop application called "LfhTutorial" with the strange Kivy GUI (see below)
 
+You will want to be in the directory where [EntryPoint.py](EntryPoint.py) is contained and when you run the file it will call the following:
+```
+# calls the Kivy app runner to build and deploy
+if __name__ == '__main__':
+    LfhTutorialApp().run()
+```
+this will launch the gui as seen in the next section below.
+
+To launch from the command line you will want to do `pyenv run entrypoint.py`
+
+
 ## GUI
 WTAF?? I hear you ask. Yeah, well the point of this demo was specifically not to have a fancy UI to distract from the data workflow. I did not want to create an entire bespoke EMR (been there, done that!) so it is a demo on rails with a single button per screen (it almost feels like a powerpoint deck but it really is executing the code). So I am no Kivy master so it uses a very simplistic BoxLayout to tug the demo along with black with white text = label, White with black text = textinput and gray with white text is a clickable button (the default Kivy scheme). The sample database provided here only includes 1 patient (GI Joe with the MRN 959595) so if you change the MRN
 
