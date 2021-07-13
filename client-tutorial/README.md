@@ -123,3 +123,6 @@ so that you are assured that the data in a given field is the data you are seeki
 
 ## Unit Testing
 The tutorial doesn't have definied unit tests, mostly because the tutorial is essentially a giant unit test itself. But feel free to put in your own unit tests to expand the tutorial
+
+##  The use case
+The basic tutorial use case is as follows: [tutorial use case](tutorial%20use%20case.md)
