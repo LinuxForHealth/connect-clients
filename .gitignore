@@ -1,6 +1,8 @@
 # IDE configurations
 .idea
 *.iml
+*.code-workspace
+
 # OS Specific
 .DS_Store
 
