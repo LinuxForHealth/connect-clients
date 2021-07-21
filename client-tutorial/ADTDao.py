@@ -40,6 +40,17 @@ class AdtDao:
             careGiverDict[caregiver.ITEMID] = caregiver
         return careGiverDict
 
+    def getCareGiverForCGID(self,CGID:int)->Caregiver:
+        """
+        return a given caregiver (rather than using the entire dict)
+        @param CGID: the linked value from other tables
+        @type CGID: int
+        @return: the caregiver (doctor)
+        @rtype: Caregiver
+        """
+        global session
+        return self.session.query(Caregiver).filter(Caregiver.CGID==CGID).one()
+
 
     def getAdmissionsForSubjectId(self, subjectId: int) -> List[Admission]:
         """

@@ -42,6 +42,17 @@ class NoteEventDao:
         global session
         return self.session.query(Noteevent).filter(Noteevent.SUBJECT_ID==SubjectId).all()
 
+    def getNoteEventById(self, id: int) -> Noteevent:
+        """
+        fetches a note event by its RowId (the primary key)
+        @param id: the Row_ID column in the database table
+        @type id: int
+        @return: the requested NoteEvent
+        @rtype: Noteevent
+        """
+        return self.session.query(Noteevent).get(id)
+
+
     def getAllRadiologyReports(self) -> List[RadiologyReport]:
         """
         fetches all radiology reports which are similar to noteevents exvept have an additional concept of the impression
