@@ -75,7 +75,7 @@ These services are *containerized* inside docker containers, so will launch as a
 configuration. This will launch these services into a cluster with a docker provided VPN amongst the containers. This coordination is described in the file `docker-compose.yml` in the root of the of the project.
 This process will automatically download the necessary containers to your system as needed.
 
-To launch the server application, navigate to the conect directory. When you list the directory you will see a file named docker-compose.yml (a YAML [pronounced YAMMEL] file - note YAML is whitespace sensitive so be very
+To launch the server application, navigate to the conect directory. When you list the directory you will see a file named docker-compose.yml (a YAML - *pronounced YAMMEL* - file - note YAML is whitespace sensitive so be very
 cautious editing this file). To startup the system enter the following command:
 
 ```

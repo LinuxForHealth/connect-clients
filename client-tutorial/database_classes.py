@@ -316,3 +316,13 @@ class RadiologyReport(Base):
     acd_study_note = Column(TINYINT(1), nullable=False)
     fhir_json = Column(JSON)
     linked_3d_study_id = Column(String(64), nullable=False, index=True)
+
+class ProblemListItem(Base):
+    __tablename__ = 'problem_list_item'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(256), nullable=False, index=True)
+    icd_code = Column(String(32), nullable=False)
+    cui = Column(String(32), nullable=False, index=True)
+    note_event_id = Column(Integer, nullable=False, index=True)
+    hadm_id = Column(Integer, nullable=False, index=True)
