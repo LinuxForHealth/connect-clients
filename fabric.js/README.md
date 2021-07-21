@@ -84,4 +84,4 @@ cd connect-clients/fabric.js
 node.js server.js
 ```
 
-That's it - you're ready to send FHIR Patient transactions to the fabric.js REST API and store them in your blockchain!
+That's it - you're ready to send FHIR data transactions to the fabric.js REST API and store them in your blockchain!
