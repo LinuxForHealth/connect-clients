@@ -8,6 +8,8 @@ from sqlalchemy import Column,ForeignKey, DECIMAL, Date, DateTime, ForeignKey, I
 from sqlalchemy.dialects.mysql import INTEGER, MEDIUMINT, MEDIUMTEXT, SMALLINT, TINYINT, VARCHAR
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from typing import List, TypedDict
+from MedActionPotential import MedicationActionPotential
 
 Base = declarative_base()
 metadata = Base.metadata
@@ -317,6 +319,28 @@ class RadiologyReport(Base):
     fhir_json = Column(JSON)
     linked_3d_study_id = Column(String(64), nullable=False, index=True)
 
+class ProblemMedication(Base):
+    __tablename__ = 'problem_medication'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(256), nullable=False)
+    description = Column(String(1024), nullable=False)
+    problemListItemId = Column(Integer, nullable=False, index=True)
+    rxnorm_id = Column(String(16), nullable=False)
+    negated = Column(TINYINT(1), nullable=False)
+    cui = Column(String(32), nullable=False)
+    action:MedicationActionPotential = None
+
+class ProblemProcedure(Base):
+    __tablename__ = 'problem_procedure'
+
+    id = Column(Integer, primary_key=True)
+    problemListItemId = Column(Integer, nullable=False, index=True)
+    name = Column(String(256), nullable=False)
+    description = Column(String(1024), nullable=False)
+    active = Column(TINYINT(1), nullable=False, index=True)
+    cui = Column(String(32), nullable=False)
+
 class ProblemListItem(Base):
     __tablename__ = 'problem_list_item'
 
@@ -326,3 +350,5 @@ class ProblemListItem(Base):
     cui = Column(String(32), nullable=False, index=True)
     note_event_id = Column(Integer, nullable=False, index=True)
     hadm_id = Column(Integer, nullable=False, index=True)
+    medicationsForProblem: List[ProblemMedication] = []
+    procedures: List[ProblemProcedure] = []
