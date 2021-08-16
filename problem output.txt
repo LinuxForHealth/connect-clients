@@ -1,0 +1,302 @@
+-------------------------------------
+PROBLEMS FOUND IN ASSESSMENT AND PLAN:
+added andexxa to 'GI bleeding'
+added Proton Pump Inhibitors to 'parkinsons'
+added oral anticoagulants to 'parkinsons'
+added rivaroxaban to 'parkinsons'
+added omeprazole to 'parkinsons'
+added rivaroxaban to 'Portal Vein thrombosis'
+added oral anticoagulants to 'thrombosis'
+added sinemet to "Parkinson's Disease"
+added Proton Pump Inhibitors to "Parkinson's Disease"
+added Proton Pump Inhibitors to "Parkinson's Disease"
+added metformin to 'Type 2 diabetes'
+added repaglinide to 'Type 2 diabetes'
+added creon to 'acute hemorrhage'
+added rivaroxaban to 'acute hemorrhage'
+added Carbidopa / Levodopa to 'acute hemorrhage'
+added repaglinide to 'acute hemorrhage'
+added omeprazole to 'acute hemorrhage'
+added glucophage to 'acute hemorrhage'
+Diagnosis: Acute Blood Loss Anemia ICD10: D62  SNOMED: 267530009
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: GI bleeding ICD10: K92.2  SNOMED: 74474003
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: tachycardia ICD10: R00.0  SNOMED: 3424008
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: parkinsons ICD10: G90.3,G20,F79  SNOMED: 49049000
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: GERD ICD10: None  SNOMED: None
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: ulcer bleed ICD10: None  SNOMED: 55075001
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: Portal Vein thrombosis ICD10: I81  SNOMED: 17920008
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: Pancreatic Cancer ICD10: C25.9  SNOMED: 363418001
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: portal vein thrombosis ICD10: I81  SNOMED: 17920008
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: thrombosis ICD10: I82.90,I82.9  SNOMED: 439127006
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: Parkinson's Disease ICD10: G20  SNOMED: 49049000
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: GI Bleed ICD10: K92.2  SNOMED: 74474003
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: Type 2 diabetes ICD10: E11.9  SNOMED: 44054006
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+Diagnosis: acute hemorrhage ICD10: None  SNOMED: 8573003
+	MEDICATIONS:
+		 andexxa - RxNorm: 2045130 ................... predicted action: DC 94.20% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: MODIFY 0.00% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 94.20% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 63.00% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: MODIFY 0.10% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: DC 0.90% 
+		 oral anticoagulants - RxNorm: None ................... predicted action: DC 99.60% 
+		 sinemet - RxNorm: 36572 ................... predicted action: MODIFY 0.00% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: DC 89.10% 
+		 Proton Pump Inhibitors - RxNorm: None ................... predicted action: START 0.10% 
+		 metformin - RxNorm: 6809 ................... predicted action: START 67.40% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: MODIFY 0.00% 
+		 creon - RxNorm: 48470 ................... predicted action: START 2.90% 
+		 rivaroxaban - RxNorm: 1114195 ................... predicted action: START 0.30% 
+		 Carbidopa / Levodopa - RxNorm: 103990 ................... predicted action: START 0.60% 
+		 repaglinide - RxNorm: 73044 ................... predicted action: START 0.20% 
+		 omeprazole - RxNorm: 7646 ................... predicted action: START 0.40% 
+		 glucophage - RxNorm: 151827 ................... predicted action: START 1.90% 
+
+Process finished with exit code 0

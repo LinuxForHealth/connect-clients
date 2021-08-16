@@ -1,4 +1,6 @@
 import ADTDao
+import PatientsDao
+from database_classes import Patient
 
 class billing():
 
@@ -10,10 +12,14 @@ class billing():
         :return: nothing
         :rtype: Nonetype
         """
+        patient:Patient = PatientsDao.getPatient(959595)
+        print(patient.payer)
+        print(patient.textSummary())
+
         adtDao = ADTDao.AdtDao()
         icdDict = adtDao.getICDDefinitions()
         print(len(icdDict.keys()))
-        for admission in adtDao.getAdmissionsForSubjectId(959595):
+        for admission in adtDao.getAdmissionsForSubjectId(patient.SUBJECT_ID):
             print("Admission: %s, Date: %s\n" % (admission.ADMISSION_LOCATION, admission.ADMITTIME.strftime("%m/%d/%Y %H:%M")))
             for drg in adtDao.getDRGsForAdmission(admission.HADM_ID):
                 print('\n\n\t - DRG: %s: %s : Severity/Mortality: %d/%d  %s' % (drg.DRG_CODE, drg.DRG_TYPE, drg.DRG_SEVERITY,

@@ -15,7 +15,7 @@ class InsuranceDao:
     class for accessing payer records in the database, claims, etc
     """
     session = None
-
+    payerDict: InsuranceCompanyDict = None
 
     def __init__(self):
         """
@@ -23,9 +23,10 @@ class InsuranceDao:
         """
         dbUtil = DatabaseUtil()
         self.session = dbUtil.getSession()
+        self.payerDict = self.fetchPayerDict()
 
 
-    def getPayerDict(self)->InsuranceCompanyDict:
+    def fetchPayerDict(self)->InsuranceCompanyDict:
         """
         gets a dictionary of the payers to get the definition of a patient's insurance record
         :return:
@@ -36,3 +37,6 @@ class InsuranceDao:
         for payer in self.session.query(Payer).all():
             payerDict[payer.id] = payer
         return payerDict
+
+    def getPayerDict(self)->InsuranceCompanyDict:
+        return self.payerDict

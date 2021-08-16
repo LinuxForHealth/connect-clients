@@ -1,5 +1,5 @@
 from databaseUtil import DatabaseUtil
-from database_classes import Caregiver, Admission, DRGCode, DiagnosisIcd, DIcdDiagnoses, CPTEvent, DCPT
+from database_classes import Caregiver, Admission, DRGCode, DiagnosisIcd, DIcdDiagnoses, CPTEvent, DCPT, Hospital
 from sqlalchemy import select
 from typing import List, TypedDict
 
@@ -29,15 +29,14 @@ class AdtDao:
 
     def getCareGiverDict(self) -> CareGiverDict:
         """
-        This gets list list of Lab Definitions as a dictionary of dict{itemId, itemdef}. This is the mapping to a lab
-        name and LOINC code
-        :return: labItemDict
+        This gets list list of caregivers as a dictionary of dict{ITEMID, Caregiver}.
+        :return: careGiverDict
         :rtype: dict(int,Caregiver)
         """
         global session
         careGiverDict = CareGiverDict()
-        for caregiver in  self.session.execute(select(Caregiver).all()):
-            careGiverDict[caregiver.ITEMID] = caregiver
+        for caregiver in  self.session.query(Caregiver).all():
+            careGiverDict[caregiver.CGID] = caregiver
         return careGiverDict
 
     def getCareGiverForCGID(self,CGID:int)->Caregiver:
@@ -129,3 +128,12 @@ class AdtDao:
         cptDict = CPTDefsDict()
         for cptDefinition in self.session.query(DCPT).all():
             cptDict[cptDefinition.CATEGORY] = cptDefinition
+
+    def getAllHospitals(self)->List[Hospital]:
+        """
+        Gets the list of defined hospitals
+        @return: hospitalList
+        @rtype: List[Hospital]
+        """
+        global session
+        return self.session.query(Hospital).all()

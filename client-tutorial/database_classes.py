@@ -1,19 +1,16 @@
 # coding: utf-8
-from sqlalchemy import BigInteger, Column, DECIMAL, Date, DateTime, Integer, INTEGER, JSON, String, text
-from sqlalchemy.dialects import mysql
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.types import TEXT, VARCHAR, SMALLINT
-# coding: utf-8
-from sqlalchemy import Column,ForeignKey, DECIMAL, Date, DateTime, ForeignKey, Index, Integer, JSON, String, Text, text
+from sqlalchemy import orm
+from sqlalchemy import Column, ForeignKey, DECIMAL, Date, DateTime, Index, Integer, JSON, String, Text, text
 from sqlalchemy.dialects.mysql import INTEGER, MEDIUMINT, MEDIUMTEXT, SMALLINT, TINYINT, VARCHAR
-from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from typing import List, TypedDict
 from MedActionPotential import MedicationActionPotential
+from datetime import date, datetime
+import string
+
 
 Base = declarative_base()
 metadata = Base.metadata
-
 
 class Admission(Base):
     __tablename__ = 'ADMISSIONS'
@@ -38,6 +35,41 @@ class Admission(Base):
     HOSPITAL_EXPIRE_FLAG = Column(TINYINT, nullable=False)
     HAS_CHARTEVENTS_DATA = Column(TINYINT, nullable=False)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__+ ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
+class Hospital(Base):
+    __tablename__ = 'hospital'
+
+    id = Column(MEDIUMINT, primary_key=True, autoincrement=True)
+    name = Column(String(256), nullable=False, index=True)
+    subsidiary_of_id = Column(MEDIUMINT, ForeignKey('Hospital.id'))
+    street = Column(String(256), nullable=False, index=True)
+    city = Column(String(128), nullable=False, index=False)
+    state = Column(String(2), nullable=False, index=True)
+    has_inpatient = Column(TINYINT(1), nullable=False, index=True)
+    has_ambulatory = Column(TINYINT(1), nullable=False, index=True)
+    website = Column(String(256), nullable=False, index=True)
+    fhir_json = Column(String(2000), nullable=False)
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__+ ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class Caregiver(Base):
     __tablename__ = 'CAREGIVERS'
@@ -55,6 +87,16 @@ class Caregiver(Base):
     DESCRIPTION = Column(String(30))
     fhir_json = Column(String(2000), nullable=False)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class DCPT(Base):
     __tablename__ = 'D_CPT'
@@ -69,6 +111,16 @@ class DCPT(Base):
     MINCODEINSUBSECTION = Column(MEDIUMINT, nullable=False)
     MAXCODEINSUBSECTION = Column(MEDIUMINT, nullable=False, unique=True)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class DIcdDiagnoses(Base):
     __tablename__ = 'D_ICD_DIAGNOSES'
@@ -78,6 +130,16 @@ class DIcdDiagnoses(Base):
     SHORT_TITLE = Column(String(50), nullable=False, index=True)
     LONG_TITLE = Column(String(255), nullable=False)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class DItem(Base):
     __tablename__ = 'D_ITEMS'
@@ -96,6 +158,16 @@ class DItem(Base):
     PARAM_TYPE = Column(String(30))
     CONCEPTID = Column(Integer)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class DLabItem(Base):
     __tablename__ = 'D_LABITEMS'
@@ -110,6 +182,17 @@ class DLabItem(Base):
     CATEGORY = Column(String(100), nullable=False)
     LOINC_CODE = Column(String(100), index=True)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
 
 class Payer(Base):
     __tablename__ = 'payer'
@@ -117,8 +200,23 @@ class Payer(Base):
     id = Column(Integer, primary_key=True)
     Name = Column(VARCHAR(128), index=True)
     plan_type = Column(VARCHAR(32), index=True)
-    address = Column(VARCHAR(256), index=False)
+    street = Column(VARCHAR(256), index=False)
+    city = Column(VARCHAR(64), index=False)
+    state = Column(VARCHAR(2), index=True)
+    zip = Column(VARCHAR(16), index=False)
+    endpoint_url = Column(VARCHAR(256), index=False)
     fhir_json = Column(JSON)
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 
 class Patient(Base):
@@ -148,6 +246,26 @@ class Patient(Base):
     acd_study_patient = Column(TINYINT(1), nullable=False, index=True, server_default=text("'0'"))
     fhir_json = Column(JSON)
 
+    def calculate_age(self) -> int:
+        """
+        calculate the age of a patient based on the supplied dob. This of course does not take account time zones (like the person
+        was born in singapore and is now in New York which crosses the international date line... (it';'s a demo)
+        :return: age in years
+        :rtype: int
+        """
+        today = date.today()
+        return today.year - self.DOB.year - ((today.month, today.day) < (self.DOB.month, self.DOB.day))
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class Prescription(Base):
     __tablename__ = 'PRESCRIPTIONS'
@@ -179,6 +297,16 @@ class Prescription(Base):
     acd_study_med = Column(TINYINT(1), nullable=False, index=True)
     fhir_json = Column(JSON, nullable=False)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class Chartevent(Base):
     __tablename__ = 'chartevents'
@@ -204,6 +332,16 @@ class Chartevent(Base):
     STOPPED = Column(String(50))
     acd_study = Column(TINYINT(1))
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class Noteevent(Base):
     __tablename__ = 'noteevents'
@@ -226,6 +364,16 @@ class Noteevent(Base):
     acd_study_note = Column(TINYINT(1), nullable=False, index=True)
     fhir_json = Column(MEDIUMTEXT)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class CPTEvent(Base):
     __tablename__ = 'CPTEVENTS'
@@ -247,6 +395,16 @@ class CPTEvent(Base):
     SUBSECTIONHEADER = Column(String(255))
     DESCRIPTION = Column(String(200), index=True)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class DiagnosisIcd(Base):
     __tablename__ = 'DIAGNOSES_ICD'
@@ -261,6 +419,16 @@ class DiagnosisIcd(Base):
     SEQ_NUM = Column(TINYINT)
     ICD9_CODE = Column(String(10))
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class DRGCode(Base):
     __tablename__ = 'DRGCODES'
@@ -279,6 +447,16 @@ class DRGCode(Base):
     DRG_SEVERITY = Column(TINYINT)
     DRG_MORTALITY = Column(TINYINT)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
 
 class LabEvent(Base):
     __tablename__ = 'LABEVENTS'
@@ -300,6 +478,17 @@ class LabEvent(Base):
     acd_study = Column(TINYINT(1), nullable=False, index=True, server_default=text("'0'"))
     fhir_json = Column(JSON)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
 class RadiologyReport(Base):
     __tablename__ = 'radiology_reports'
 
@@ -319,6 +508,17 @@ class RadiologyReport(Base):
     fhir_json = Column(JSON)
     linked_3d_study_id = Column(String(64), nullable=False, index=True)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
 class ProblemMedication(Base):
     __tablename__ = 'problem_medication'
 
@@ -331,6 +531,17 @@ class ProblemMedication(Base):
     cui = Column(String(32), nullable=False)
     action:MedicationActionPotential = None
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
 class ProblemProcedure(Base):
     __tablename__ = 'problem_procedure'
 
@@ -341,8 +552,45 @@ class ProblemProcedure(Base):
     active = Column(TINYINT(1), nullable=False, index=True)
     cui = Column(String(32), nullable=False)
 
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
 class ProblemListItem(Base):
     __tablename__ = 'problem_list_item'
+
+    # we need a regular init and the special ORM init in case the obejct was made by the ORM
+    def __init__(self):
+        self.medicationsForProblem: List[ProblemProcedure] = []
+        self.procedures: List[ProblemProcedure] = []
+
+    @orm.reconstructor
+    def init_on_load(self):
+        self.medicationsForProblem: List[ProblemProcedure] = []
+        self.procedures: List[ProblemProcedure] = []
+
+    def getMedicationsForProblem(self)->List[ProblemMedication]:
+        """
+        returns dynamic unmapped medication list
+        @return: medicationsForProblem
+        @rtype: List[ProblemMedication]
+        """
+        return self.medicationsForProblem
+
+    def getProceduresForProblem(self)->List[ProblemProcedure]:
+        """
+        returns dynamic unmapped procedure list
+        @return: procedures
+        @rtype: List[ProblemProcedure]
+        """
+        return self.procedures
 
     id = Column(Integer, primary_key=True)
     name = Column(String(256), nullable=False, index=True)
@@ -350,5 +598,14 @@ class ProblemListItem(Base):
     cui = Column(String(32), nullable=False, index=True)
     note_event_id = Column(Integer, nullable=False, index=True)
     hadm_id = Column(Integer, nullable=False, index=True)
-    medicationsForProblem: List[ProblemMedication] = []
-    procedures: List[ProblemProcedure] = []
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)

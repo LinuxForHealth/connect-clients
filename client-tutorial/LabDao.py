@@ -6,7 +6,7 @@ from typing import List, TypedDict
 
 class DLabItemDict(TypedDict):
     id: int
-    name: str
+    name: DLabItem
 
 class LabDao:
     """
@@ -30,9 +30,9 @@ class LabDao:
         :rtype: dict(int,DLabItem)
         """
         global session
-        labItemDict = DLabItemDict()
-        for labItem in  self.session.execute(select(DLabItem).all()):
-            labItemDict[labItem.ITEMID] = labItem.LABEL
+        labItemDict:DLabItemDict = DLabItemDict()
+        for labItem in  self.session.query(DLabItem).all():
+            labItemDict[labItem.ITEMID] = labItem
         return labItemDict
 
     def getLabsForPatient(self, subjectId: int) -> List:

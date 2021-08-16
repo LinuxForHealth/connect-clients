@@ -97,16 +97,16 @@ class Nlp_Analyzer():
                     medication.cui = attribute.snomed_concept_id
                     medication.action = self.getActionForMedicationConcept(attribute)
                     # check for duplicated med names, a common issue when the same term is repeated many time
-                    problemListItem.medicationsForProblem.append(medication)
-                    print('added %s to %a' %(medication.name, problemListItem.name))
+                    problemListItem.getMedicationsForProblem().append(medication)
+                    #print('added %s to %a' %(medication.name, problemListItem.name))
 
                     listItem = False
-                elif attribute.name == 'ICProcedure' and ProblemListItem != None and attribute.section_normalized_name == 'Assessment and plan':
+                elif attribute.name.__contains__('DiagnosticProcedure') and ProblemListItem != None and attribute.section_normalized_name == 'Assessment and plan':
                     procedure: ProblemProcedure = ProblemProcedure()
                     procedure.name = attribute.preferred_name
                     procedure.cui = attribute.snomed_concept_id
                     procedure.active = not (attribute.negated)
-                    problemListItem.procedures.append(procedure)
+                    problemListItem.getProceduresForProblem().append(procedure)
                     listItem = False
 
         except acd.ACDException as ex:
