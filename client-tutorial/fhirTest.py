@@ -33,7 +33,6 @@ labItems =  labDao.getAllDLabItems()
 labEvents = labDao.getLabsForPatient(patient.SUBJECT_ID)
 for labEvent in labEvents:
     labItem = labItems[labEvent.ITEMID]
-    print(fhirUtil.getLabEventAsFhir(labEvent, labItem))
 adtDao = AdtDao()
 careGiverDict = adtDao.getCareGiverDict()
 

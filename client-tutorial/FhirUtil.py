@@ -162,18 +162,23 @@ class FhirConverters:
             self.roleTitle = 'Physician'
             self.roleSystem = 'http://terminology.hl7.org/CodeSystem/practitioner-role'
             self.roleCode = 'Doctor'
-            if careGiver.LABEL.contains('PA'):
-                self.roleTitle = 'Physician Assistant'
+            if careGiver.LABEL:
+                if 'PA' in careGiver.LABEL:
+                    self.roleTitle = 'Physician Assistant'
+                    self.roleSystem = 'http://snomed.info/sct'
+                    self.roleCode = '449161006'
+                elif 'Res' in careGiver.LABEL:
+                    self.roleTitle = 'Physician Assistant'
+                    self.roleSystem = 'http://snomed.info/sct'
+                    self.roleCode = '405277009'
+                elif 'NP' in careGiver.LABEL:
+                    self.roleTitle = 'Nurse Practicioner'
+                    self.roleSystem = 'http://snomed.info/sct'
+                    self.roleCode = '224571005'
+            else:
+                self.roleTitle = careGiver.DESCRIPTION
                 self.roleSystem = 'http://snomed.info/sct'
-                self.roleCode = '449161006'
-            elif careGiver.LABEL.contains('Res'):
-                self.roleTitle = 'Physician Assistant'
-                self.roleSystem = 'http://snomed.info/sct'
-                self.roleCode = '405277009'
-            elif careGiver.LABEL.contains('Res'):
-                self.roleTitle = 'Nurse Practicioner'
-                self.roleSystem = 'http://snomed.info/sct'
-                self.roleCode = '224571005'
+                self.roleCode = '224598009'
         elif careGiver.DESCRIPTION == 'RN' or careGiver.DESCRIPTION == 'Case Manager':
             self.roleTitle = 'RN'
             self.roleSystem = 'http://terminology.hl7.org/CodeSystem/practitioner-role'
@@ -200,34 +205,35 @@ class FhirConverters:
             self.roleTitle = 'Pharmacist'
             self.roleSystem = 'http://terminology.hl7.org/CodeSystem/practitioner-role'
             self.roleCode = 'Pharmacist'
-        elif careGiver.DESCRIPTION == None and careGiver.LABEL.contains('MD'):
-            self.roleTitle = 'Physician'
-            self.roleSystem = '	http://terminology.hl7.org/CodeSystem/practitioner-role'
-            self.roleCode = 'Doctor'
-        elif careGiver.DESCRIPTION == None and careGiver.LABEL.contains('ST') or careGiver.LABEL.contains('St')  or careGiver.LABEL.contains('st')  or careGiver.LABEL.contains('MS'):
-            self.roleTitle = 'Medical Student'
-            self.roleSystem = 'http://snomed.info/sct'
-            self.roleCode = '398130009'
-        elif careGiver.DESCRIPTION == None and careGiver.LABEL.contains('RRT'):
-            self.roleTitle = 'Respiratory Therapist'
-            self.roleSystem = 'http://snomed.info/sct'
-            self.roleCode = '442867008'
-        elif careGiver.DESCRIPTION == None and careGiver.LABEL.contains('OT'):
-            self.roleTitle = 'Occupational Therapist'
-            self.roleSystem = 'http://snomed.info/sct'
-            self.roleCode = '80546007'
-        elif careGiver.DESCRIPTION == None and careGiver.LABEL.contains('PCT'):
-            self.roleTitle = 'Patient Care Technician'
-            self.roleSystem = 'http://snomed.info/sct'
-            self.roleCode = '5275007'
-        elif careGiver.DESCRIPTION == None and careGiver.LABEL.contains('LICSW'):
-            self.roleTitle = 'Social Worker'
-            self.roleSystem = 'http://snomed.info/sct'
-            self.roleCode = '224598009'
-        else:
-            self.roleTitle = careGiver.DESCRIPTION
-            self.roleSystem = 'http://snomed.info/sct'
-            self.roleCode = '224598009'
+        if careGiver.LABEL:
+            if careGiver.DESCRIPTION == None and careGiver.LABEL and 'MD' in careGiver.LABEL:
+                self.roleTitle = 'Physician'
+                self.roleSystem = '	http://terminology.hl7.org/CodeSystem/practitioner-role'
+                self.roleCode = 'Doctor'
+            elif careGiver.DESCRIPTION == None and careGiver.LABEL and 'ST' in careGiver.LABEL or 'St' in careGiver.LABEL  or 'st' in careGiver.LABEL  or 'MS' in careGiver.LABEL:
+                self.roleTitle = 'Medical Student'
+                self.roleSystem = 'http://snomed.info/sct'
+                self.roleCode = '398130009'
+            elif careGiver.DESCRIPTION == None and careGiver.LABEL and 'RRT' in careGiver.LABEL:
+                self.roleTitle = 'Respiratory Therapist'
+                self.roleSystem = 'http://snomed.info/sct'
+                self.roleCode = '442867008'
+            elif careGiver.DESCRIPTION == None and careGiver.LABEL and 'OT' in careGiver.LABEL:
+                self.roleTitle = 'Occupational Therapist'
+                self.roleSystem = 'http://snomed.info/sct'
+                self.roleCode = '80546007'
+            elif careGiver.DESCRIPTION == None and careGiver.LABEL and 'PCT' in careGiver.LABEL:
+                self.roleTitle = 'Patient Care Technician'
+                self.roleSystem = 'http://snomed.info/sct'
+                self.roleCode = '5275007'
+            elif careGiver.DESCRIPTION == None and careGiver.LABEL and 'LICSW' in careGiver.LABEL:
+                self.roleTitle = 'Social Worker'
+                self.roleSystem = 'http://snomed.info/sct'
+                self.roleCode = '224598009'
+            else:
+                self.roleTitle = careGiver.DESCRIPTION
+                self.roleSystem = 'http://snomed.info/sct'
+                self.roleCode = '224598009'
         json_dict = {
                             "practitioner": {
                                 "reference": "Practitioner/f007",
@@ -276,8 +282,9 @@ class FhirConverters:
         @rtype: Practitioner
         """
         if careGiver != None and hospital != None:
-            practicioner: Practitioner = self.getCareGiverAsFhir(careGiver).contained
+            practicioner: Practitioner = self.getCareGiverAsFhir(careGiver)
             if practicioner:
+                print(practicioner)
                 practicionerRole: PractitionerRole = self.getPracticionerRoleAsFhir(careGiver, hospital)
                 practicioner.contained = [practicionerRole]
             else:
