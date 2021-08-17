@@ -11,6 +11,10 @@ from fhir.resources.patient import Patient
 from fhir.resources.documentreference import DocumentReference
 from typing import TypedDict
 
+class HospitalDict(TypedDict):
+    id:int
+    hospital:Hospital
+
 patientDao = PatientsDao()
 fhirUtil = FhirConverters()
 patient = patientDao.getPatient('959595')
@@ -30,9 +34,15 @@ for labEvent in labEvents:
     print(fhirUtil.getLabEventAsFhir(labEvent, labItem))
 adtDao = AdtDao()
 careGiverDict = adtDao.getCareGiverDict()
+
+hospitalDict:HospitalDict = HospitalDict()
+
+for hospital in adtDao.getAllHospitals():
+    hospitalDict[hospital.id] = hospital
+
 for id in careGiverDict.keys():
     if careGiverDict[id].NPI_number != None and careGiverDict[id].NPI_number:
         print(fhirUtil.getCareGiverAsFhir(careGiverDict[id]))
+        print(fhirUtil.getPracticionerRoleAsFhir(careGiverDict[id], hospitalDict[careGiverDict[id].works_for_hospital_id]))
 
-for hospital in adtDao.getAllHospitals():
-    print(hospital)
+print(fhirUtil.getPracticionerRoleAsFhir())

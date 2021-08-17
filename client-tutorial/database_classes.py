@@ -85,6 +85,7 @@ class Caregiver(Base):
     gender = Column(String(16), nullable=False, index=True)
     LABEL = Column(String(15))
     DESCRIPTION = Column(String(30))
+    works_for_hospital_id = Column(Integer, ForeignKey('Hospital.id'))
     fhir_json = Column(String(2000), nullable=False)
 
     def __str__(self):
