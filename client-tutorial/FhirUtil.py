@@ -160,6 +160,7 @@ class FhirConverters:
         json_dict = {
                         "resource": {
                             "resourceType": "PractitionerRole",
+                            "active": "true",
                             "id": "f007-0"},
                             "practitioner": {
                                 "reference": "Practitioner/f007",
