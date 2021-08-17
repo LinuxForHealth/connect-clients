@@ -158,10 +158,6 @@ class FhirConverters:
             roleTitle = 'Pharmacist'
 
         json_dict = {
-                        "resource": {
-                            "resourceType": "PractitionerRole",
-                            "active": "true",
-                            "id": "f007-0"},
                             "practitioner": {
                                 "reference": "Practitioner/f007",
                                 "display": careGiver.first_name+" "+careGiver.last_name
