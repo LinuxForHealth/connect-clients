@@ -520,6 +520,35 @@ class RadiologyReport(Base):
                 skip = True
         return ', '.join(elements)
 
+
+class EKGReport(Base):
+    __tablename__ = 'ekg_reports'
+
+    ROW_ID = Column(INTEGER, primary_key=True)
+    SUBJECT_ID = Column(MEDIUMINT, nullable=False, index=True)
+    HADM_ID = Column(MEDIUMINT)
+    CHARTDATE = Column(Date, nullable=False)
+    CHARTTIME = Column(DateTime)
+    STORETIME = Column(DateTime)
+    CATEGORY = Column(VARCHAR(50), nullable=False, index=True)
+    DESCRIPTION = Column(VARCHAR(255), nullable=False)
+    CGID = Column(SMALLINT, index=True)
+    ISERROR = Column(TINYINT)
+    TEXT = Column(MEDIUMTEXT, index=True)
+    acd_study_note = Column(TINYINT(1), nullable=False)
+    fhir_json = Column(JSON)
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
 class ProblemMedication(Base):
     __tablename__ = 'problem_medication'
 

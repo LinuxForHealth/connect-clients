@@ -6,6 +6,7 @@ from fhir.resources.observation import Observation
 from fhir.resources.narrative import Narrative
 from fhir.resources.practitioner import Practitioner
 from fhir.resources.practitionerrole import PractitionerRole
+from fhir.resources.diagnosticreport import DiagnosticReport
 from fhir.resources.attachment import Attachment
 from fhir.resources.humanname import HumanName
 from datetime import date
@@ -50,6 +51,48 @@ class FhirConverters:
                                      "system": "http://https://mimic.physionet.org/identifiers/subjectid"}]}
         fhirPatient = Patient.parse_obj(json_dict)
         return fhirPatient
+
+    def getRadiologyReportAsFhir(self,report:database_classes.RadiologyReport)->DiagnosticReport:
+        """
+        returns a fhir resource of a radiology report entity to FHIR
+        @param report: a radiology report
+        @type report: database_classes.RadiologyReport
+        @return: the diagnostic report
+        @rtype: DiagnosticReport
+        """
+        reportDiv: str = "<div xmlns=\"http://www.w3.org/1999/xhtml\">" + report.TEXT + "</div>"
+        attachment: Attachment = Attachment()
+        attachment.contentType = "text/plain"
+        attachment.data = base64.b64encode(bytes(reportDiv, 'utf-8'))
+        json_dict = {"resourceType": "DocumentReference", "text": {"status": "generated", "div": reportDiv},
+                     "status": "current",
+                     "id": report.ROW_ID, "content": [{"attachment": attachment}],
+                     "description": report.DESCRIPTION, "type": {"coding": [{"code": "68604-8"}]},
+                     "impression":report.Impression,
+                     "identifier": [{"value": report.SUBJECT_ID,
+                                     "type": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v2-0203"}]},
+                                     "system": "http://https://mimic.physionet.org/identifiers/subjectid"}]}
+
+
+    def getEKGReportAsFhir(self,report:database_classes.EKGReport)->DiagnosticReport:
+        """
+        returns a fhir resource of a EKG report entity to FHIR
+        @param report: an EKG report
+        @type report: database_classes.EKGReport
+        @return: the diagnostic report
+        @rtype: DiagnosticReport
+        """
+        reportDiv: str = "<div xmlns=\"http://www.w3.org/1999/xhtml\">" + report.TEXT + "</div>"
+        attachment: Attachment = Attachment()
+        attachment.contentType = "text/plain"
+        attachment.data = base64.b64encode(bytes(reportDiv, 'utf-8'))
+        json_dict = {"resourceType": "DocumentReference", "text": {"status": "generated", "div": reportDiv},
+                     "status": "current",
+                     "id": report.ROW_ID, "content": [{"attachment": attachment}],
+                     "description": report.DESCRIPTION, "type": {"coding": [{"code": "28010-7"}]},
+                     "identifier": [{"value": report.SUBJECT_ID,
+                                     "type": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v2-0203"}]},
+                                     "system": "http://https://mimic.physionet.org/identifiers/subjectid"}]}
 
     def getNoteEventsAsFhir(self, noteEvent: database_classes.Noteevent) -> DocumentReference:
         """
@@ -284,7 +327,6 @@ class FhirConverters:
         if careGiver != None and hospital != None:
             practicioner: Practitioner = self.getCareGiverAsFhir(careGiver)
             if practicioner:
-                print(practicioner)
                 practicionerRole: PractitionerRole = self.getPracticionerRoleAsFhir(careGiver, hospital)
                 practicioner.contained = [practicionerRole]
             else:
