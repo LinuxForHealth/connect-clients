@@ -9,6 +9,8 @@ from ADTDao import AdtDao
 from LabDao import LabDao, DLabItemDict
 from fhir.resources.patient import Patient
 from fhir.resources.documentreference import DocumentReference
+from fhir.resources.practitioner import Practitioner
+from fhir.resources.practitionerrole import PractitionerRole
 from typing import TypedDict
 
 class HospitalDict(TypedDict):
@@ -41,12 +43,9 @@ for hospital in adtDao.getAllHospitals():
     hospitalDict[hospital.id] = hospital
 
 for careGiver in careGiverDict.values():
-    # tmporary block on null NPIs but will accomodate other roles shortly with the PracticionerRole
-    if careGiver.NPI_number != None and careGiver.NPI_number:
-        hospital:Hospital = hospitalDict[careGiver.works_for_hospital_id]
-        print(hospital)
-        print(careGiver)
-        if (hospital and careGiver):
-            print(fhirUtil.getPracticionerRoleAsFhir(careGiver, hospital))
-
-print(fhirUtil.getPracticionerRoleAsFhir())
+    hospital:Hospital = hospitalDict[careGiver.works_for_hospital_id]
+    print(hospital)
+    print(careGiver)
+    if (hospital and careGiver):
+        practicioner:Practitioner = fhirUtil.getPracticionerWithRoleAsFhir(careGiver, hospital)
+        print(practicioner)
