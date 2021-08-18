@@ -7,6 +7,7 @@ from fhir.resources.narrative import Narrative
 from fhir.resources.practitioner import Practitioner
 from fhir.resources.practitionerrole import PractitionerRole
 from fhir.resources.diagnosticreport import DiagnosticReport
+from fhir.resources.extension import Extension
 from fhir.resources.attachment import Attachment
 from fhir.resources.humanname import HumanName
 from datetime import date
@@ -46,7 +47,7 @@ class FhirConverters:
                      "address": [{
                          "use": "home", "type": "postal", "line": [dbpatient.street], "city": dbpatient.city,
                          "state": dbpatient.state, "postalCode": dbpatient.zip, "country": "USA"}],
-                     "identifier": [{"value": dbpatient.SUBJECT_ID,
+                     "identifier": [{"value": dbpatient.SUBJECT_ID, "extension": [{"url": "http://hl7.org/fhir/StructureDefinition/geolocation", "extension": [{"url": "latitude", "valueDecimal": dbpatient.latitude}, {"url": "longitude", "valueDecimal": dbpatient.longitude}]}],
                                      "type": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v2-0203"}]},
                                      "system": "http://https://mimic.physionet.org/identifiers/subjectid"}]}
         fhirPatient = Patient.parse_obj(json_dict)
