@@ -22,7 +22,7 @@ class HospitalDict(TypedDict):
     hospital:Hospital
 
 class PracticionerDict(TypedDict):
-    in:int
+    id:int
     practictioner:Practitioner
 
 # Set up all the dabatase access classes
