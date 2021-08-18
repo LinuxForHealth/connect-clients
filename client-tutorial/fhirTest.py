@@ -32,11 +32,14 @@ noteEventDao:NoteEventDao = NoteEventDao()
 noteEvent:Noteevent = noteEventDao.getNoteEventById(1)
 fhirDocumentReference = fhirUtil.getNoteEventsAsFhir(noteEvent)
 labDao = LabDao()
+#Make a dictionary of the lab definitions compared to the item codes in the LabEvent entity
 labItems: DLabItemDict = None
 labItem:DLabItem = None
 labItems =  labDao.getAllDLabItems()
-labEvents = labDao.getLabsForPatient(patient.SUBJECT_ID)
-for labEvent in labEvents:
+#that query returns the dictionary from the database
+for labEvent in labDao.getLabsForPatient(patient.SUBJECT_ID):
+    # iterate over each lab event for this patient (severral hundred) and then convert them into FHIR resources. In this
+    # case they just fall on the floor but you could do something useful here (like transmit them somewhere)
     labItem = labItems[labEvent.ITEMID]
 adtDao = AdtDao()
 careGiverDict = adtDao.getCareGiverDict()

@@ -11,7 +11,7 @@ This project does not depend on any propietary or commercial libraries. The proj
 ## FHIR
 this code is *en fuego* and ultimately will deliver this make-believe patient's clinical data to your FHIR server. Like your Miranda Rights, if you don't have a FHIR server one will be provided for you! So if you just do a basic docker compose launch you will get the IBM FHIR Server R4 launched in your docker environment. However what if, like me, you had an existing off machine FHIR server running (like say a regional HIE), you need to make a few edits as follows:
 
-In docker-compose.yml, find the ibm-fhir section and change to something like this (or docker will install a local fhir server) - remember in YAML white space matters to make sure it matches the entries above it:
+In docker-compose.yml, find the ibm-fhir section and change to something like this (or docker will install a local fhir server) - remember in YAML **white space matters** to make sure it matches the entries above it:
 
 ```
 ibm-fhir:
@@ -22,7 +22,7 @@ ibm-fhir:
     ports:
       - 9443:9443
 ```
-Now you may be confused by the URLs in *entrypoint.py* where the URL is pointing to "localhost" which is because remember you are sending your FHIR data to LFH's connect service which will handle the delivery to the FHIR server, and it is running locally (that whole docker thing above). So inside connect you need to tell it where the destination fhir server is located in *config.py*
+Now you may be confused by the URLs in *entrypoint.py* where the URL is pointing to "localhost" which is because, remember you are sending your FHIR data to LFH's connect service which will handle the delivery to the FHIR server, and it is running locally (that whole docker thing above). So inside connect you need to tell it where the destination fhir server is located in *config.py*
 
 Note the patient resources make heavy use of FHIR extensions such as geolocation, for the purposes of the demo. for example as below:
 
@@ -79,6 +79,25 @@ Note the patient resources make heavy use of FHIR extensions such as geolocation
   ],
   "resourceType": "Patient"
 }
+```
+There are 2 ways in this demo set to generate FHIR resources in this tutorial from the database entities. Based on some early work that I had done on a prior
+project where we needed to generate FHIR output extremely rapidly, we generated the FHIR resource JSON on database write (i.e. when we saved the record) so later it was available
+at all times for export without an computation. This allowed massive FHIR output of entire tables or resource types. So initially to make it simple I just use the pregenerated
+FHIR stored in the database (they were previously generated using the IBM FHIR server FhirClient library in Java). Later in this tutorial we will use the
+[FhirUtil.py](FhirUtil.py) I've built to do direct conversions of the SqlAlchemy entities via convenience methods.
+
+### FHIR Encoding example:
+```
+    labDao = LabDao()
+    #Make a dictionary of the lab definitions compared to the item codes in the LabEvent entity
+    labItems: DLabItemDict = None
+    labItem:DLabItem = None
+    labItems =  labDao.getAllDLabItems()
+    #that query returns the dictionary from the database
+    for labEvent in labDao.getLabsForPatient(patient.SUBJECT_ID):
+        # iterate over each lab event for this patient (severral hundred) and then convert them into FHIR resources. In this
+        # case they just fall on the floor but you could do something useful here (like transmit them somewhere)
+        labItem = labItems[labEvent.ITEMID]
 ```
 
 
