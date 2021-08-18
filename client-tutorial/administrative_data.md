@@ -52,3 +52,6 @@ The CPT definitions are less required as much of the information required for bi
 ## Modifying `billing.py`
 Where would I go from here? Well this is where the 2 roads diverge: you can go the FHIR route and convert these claims data into FHIR resources and send them like we did in the main tutorial or switch 
 to X12 (**Warning: Thar be dragons!**)
+
+## Next Tutorial
+This is **finally** the link to the FHIR generation we mentioned multiple pages ago. So we need to go to [FhirTutorial.md](FhirTutorial.md)

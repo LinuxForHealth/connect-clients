@@ -211,8 +211,8 @@ to send via LFH in the *sendToFhirCallback* method.
 
 ## Actually sending FHIR via LFH
 All of the above is simply getting to this key feature which is the heart of what LFH does. Now your note that the method calls a feature *asyncio* which is because the tramsission to LFH is an asynchronous process. In
-Python the built-in asynchio library facilitates this asynchronous method execution. And is somewhat akin to the Java Runnable interface. To make the tutorial simpler, the FHIR resources are pre-generated and stored as JSON in 
-the database (in the fhir_json field). In your application you likley will need to generate the FHIR json via a fhir library if your choice. LFH includes the Pydantic library to valid FHIR resources. So if you look in the code in the FHIR sender methods:
+Python the built-in *asynchio* library facilitates this asynchronous method execution. And is somewhat akin to the Java *Runnable* interface. To make the tutorial simpler, the FHIR resources are pre-generated and stored as JSON in
+the database (in the fhir_json field). In your application you likley will need to generate the FHIR json via a fhir library of your choice (don't worry I do continue onto generating that internallyå). LFH includes the Pydantic library to valid FHIR resources. So if you look in the code in the FHIR sender methods:
 
 ```paient
 # send the patient resource
