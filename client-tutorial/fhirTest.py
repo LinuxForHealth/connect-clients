@@ -1,6 +1,7 @@
 #  Copyright (c) 2021 IBM Corporation
 #  Henry Feldman, MD (CMO Development, IBM Watson Health)
 
+from typing import List
 from FhirUtil import FhirConverters
 from database_classes import Patient, Noteevent, LabEvent, DLabItem, Caregiver, Hospital, EKGReport, RadiologyReport
 from PatientsDao import PatientsDao
@@ -8,6 +9,7 @@ from NoteEventDao import NoteEventDao
 from ReportsDao import ReportsDao
 from ADTDao import AdtDao
 from LabDao import LabDao, DLabItemDict
+from fhir.resources.domainresource import DomainResource
 from fhir.resources.patient import Patient
 from fhir.resources.documentreference import DocumentReference
 from fhir.resources.diagnosticreport import DiagnosticReport
@@ -16,6 +18,7 @@ from fhir.resources.practitionerrole import PractitionerRole
 from typing import TypedDict
 import pprint
 import json
+import asyncio
 
 class HospitalDict(TypedDict):
     id:int
@@ -24,6 +27,9 @@ class HospitalDict(TypedDict):
 class PracticionerDict(TypedDict):
     id:int
     practictioner:Practitioner
+
+# make a list for holding all the fhir to send (not because we can't send individually but it's a good demo that you can do this)
+fhirList:List[DomainResource] = []
 
 # Set up all the dabatase access classes
 patientDao = PatientsDao()
@@ -42,12 +48,15 @@ print('sending to fhir converter')
 fhirPatient  = fhirUtil.getPatientAsFhir(patient)
 #now we have the Patient resource (we're going to ignore it here)
 # pprint.pprint(fhirPatient.json(), indent=1, depth=5, width=80)
+fhirList.append(fhirPatient)
+
 
 # now get this patient's notes (uncomment the pprint statement to see the contents)
 noteEventDao:NoteEventDao = NoteEventDao()
 noteEvent:Noteevent = noteEventDao.getNoteEventById(1)
 fhirDocumentReference = fhirUtil.getNoteEventsAsFhir(noteEvent)
 # pprint.pprint(fhirDocumentReference.json(), indent=1, depth=5, width=80)
+fhirList.append(fhirDocumentReference)
 
 #Make a dictionary of the lab definitions compared to the item codes in the LabEvent entity
 labItems: DLabItemDict = None
@@ -64,6 +73,7 @@ for labEvent in labDao.getLabsForPatient(patient.SUBJECT_ID):
     labItem = labItems[labEvent.ITEMID]
     labFhir = fhirUtil.getLabEventAsFhir(labEvent, labItem)
     # pprint.pprint(labFhir.json(), indent=1, depth=5, width=80)
+    fhirList.append(labFhir)
 
 # now let's create the Practicioners (called aregivers in the original MIMIC III) as fhir resources
 careGiverDict = adtDao.getCareGiverDict()
@@ -84,19 +94,34 @@ for careGiver in careGiverDict.values():
         practicioner:Practitioner = fhirUtil.getPracticionerWithRoleAsFhir(careGiver, hospital)
         #pprint.pprint(practicioner.json(), indent=1, depth=5, width=80)
         practicionerDict[careGiver.CGID] = practicioner
-        # pprint.pprint(radiologyReport.json(), indent=1, depth=5, width=80)
+        # pprint.pprint(practicioner.json(), indent=1, depth=5, width=80)
+        fhirList.append(practicioner)
 
 
 #now let's do radiology reports
 for report in reportsDao.getRadiologyReportsForPatient(patient.SUBJECT_ID):
-     radiologyReport:DiagnosticReport = fhirUtil.getRadiologyReportAsFhir(report)
+    radiologyReport:DiagnosticReport = fhirUtil.getRadiologyReportAsFhir(report)
     # Put the practicioner as a contained resource
-    radiologyReport.contained = practicionerDict[report.CGID]
-
+    if radiologyReport:
+        radiologyReport.contained = practicionerDict[report.CGID]
+    # pprint.pprint(radiologyReport.json(), indent=1, depth=5, width=80)
+    fhirList.append(radiologyReport)
 
 # do EKG reports
 for ekg in reportsDao.getAllEKGReportsForPatient(patient.SUBJECT_ID):
     ekgReport:DiagnosticReport = fhirUtil.getEKGReportAsFhir(ekg)
     # Put the practicioner as a contained resource
-    ekgReport.contained = practicionerDict[report.CGID]
+    if ekgReport:
+        ekgReport.contained = practicionerDict[report.CGID]
     # pprint.pprint(ekgReport.json(), indent=1, depth=5, width=80)
+    fhirList.append(ekgReport)
+
+#now send all the resources to Connect
+print('Sending '+str(len(fhirList))+" to FHIR via LFH Connect")
+loop = asyncio.get_event_loop()
+
+for fhirResource in fhirList:
+    if fhirResource:
+        loop.run_until_complete(fhirUtil.sendFhirResourceToConnectLFH(fhirResource))
+loop.close()
+print('completed FHIR sending to LFH Connect')
