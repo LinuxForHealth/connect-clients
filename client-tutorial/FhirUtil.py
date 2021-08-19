@@ -190,6 +190,10 @@ class FhirConverters:
             print("********** BEGIN PARSE FAILURE *************")
             print(json_dict)
             print("********** END PARSE FAILURE *************")
+        if practicioner.Config:
+            error:str = practicioner.Config.error_msg_templates['value_error.extra']
+            print("***** ERROR IN FHIR: getCareGiverAsFhir(): "+error)
+            practicioner= None
         return practicioner
 
     def getPracticionerRoleAsFhir(self, careGiver: database_classes.Caregiver, hospital:database_classes.Hospital ) -> PractitionerRole:
@@ -375,6 +379,6 @@ class FhirConverters:
 
         fhir_r4_externalserver_url:str = 'https://localhost:5000/fhir/'+fhirResource.resource_type
         print(fhir_r4_externalserver_url)
-        pprint.pprint(fhirResource.json(), indent=1, depth=5, width=80)
+        # pprint.pprint(fhirResource.json(), indent=1, depth=5, width=80)
 
         await self.send_fhir_to_connect(fhirResource.json(), fhir_r4_externalserver_url)

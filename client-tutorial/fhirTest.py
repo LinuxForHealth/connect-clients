@@ -76,6 +76,7 @@ for labEvent in labDao.getLabsForPatient(patient.SUBJECT_ID):
     labFhir = fhirUtil.getLabEventAsFhir(labEvent, labItem)
     # pprint.pprint(labFhir.json(), indent=1, depth=5, width=80)
     fhirList.append(labFhir)
+    loop.run_until_complete(fhirUtil.sendFhirResourceToConnectLFH(labFhir))
 
 # now let's create the Practicioners (called aregivers in the original MIMIC III) as fhir resources
 careGiverDict = adtDao.getCareGiverDict()
@@ -96,9 +97,9 @@ for careGiver in careGiverDict.values():
         practicioner:Practitioner = fhirUtil.getPracticionerWithRoleAsFhir(careGiver, hospital)
         #pprint.pprint(practicioner.json(), indent=1, depth=5, width=80)
         practicionerDict[careGiver.CGID] = practicioner
-        # pprint.pprint(practicioner.json(), indent=1, depth=5, width=80)
+        pprint.pprint(practicioner.json(), indent=1, depth=5, width=80)
         fhirList.append(practicioner)
-
+        loop.run_until_complete(fhirUtil.sendFhirResourceToConnectLFH(practicioner))
 
 #now let's do radiology reports
 for report in reportsDao.getRadiologyReportsForPatient(patient.SUBJECT_ID):
