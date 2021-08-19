@@ -30,6 +30,7 @@ class PracticionerDict(TypedDict):
 
 # make a list for holding all the fhir to send (not because we can't send individually but it's a good demo that you can do this)
 fhirList:List[DomainResource] = []
+loop = asyncio.get_event_loop()
 
 # Set up all the dabatase access classes
 patientDao = PatientsDao()
@@ -49,7 +50,7 @@ fhirPatient  = fhirUtil.getPatientAsFhir(patient)
 #now we have the Patient resource (we're going to ignore it here)
 # pprint.pprint(fhirPatient.json(), indent=1, depth=5, width=80)
 fhirList.append(fhirPatient)
-
+loop.run_until_complete(fhirUtil.sendFhirResourceToConnectLFH(fhirPatient))
 
 # now get this patient's notes (uncomment the pprint statement to see the contents)
 noteEventDao:NoteEventDao = NoteEventDao()
@@ -57,6 +58,7 @@ noteEvent:Noteevent = noteEventDao.getNoteEventById(1)
 fhirDocumentReference = fhirUtil.getNoteEventsAsFhir(noteEvent)
 # pprint.pprint(fhirDocumentReference.json(), indent=1, depth=5, width=80)
 fhirList.append(fhirDocumentReference)
+loop.run_until_complete(fhirUtil.sendFhirResourceToConnectLFH(fhirDocumentReference))
 
 #Make a dictionary of the lab definitions compared to the item codes in the LabEvent entity
 labItems: DLabItemDict = None
@@ -118,10 +120,9 @@ for ekg in reportsDao.getAllEKGReportsForPatient(patient.SUBJECT_ID):
 
 #now send all the resources to Connect
 print('Sending '+str(len(fhirList))+" to FHIR via LFH Connect")
-loop = asyncio.get_event_loop()
 
-for fhirResource in fhirList:
-    if fhirResource:
-        loop.run_until_complete(fhirUtil.sendFhirResourceToConnectLFH(fhirResource))
+#for fhirResource in fhirList:
+#    if fhirResource:
+#        loop.run_until_complete(fhirUtil.sendFhirResourceToConnectLFH(fhirResource))
 loop.close()
 print('completed FHIR sending to LFH Connect')
