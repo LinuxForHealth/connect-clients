@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from database_classes import *
+from config import get_settings
 
 session=None
 engine=None
@@ -31,10 +32,11 @@ class DatabaseUtil():
         Base = declarative_base()
         metadata = Base.metadata
 
+        settings = get_settings()
         logging.basicConfig()
         # turn this off in production as it will drive us crazy
         #logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
-        engine = create_engine('mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/kafkaFhirDemoDb')
+        engine = create_engine(settings.tutorial_mysql_url)
 
 
 
