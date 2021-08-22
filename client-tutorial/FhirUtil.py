@@ -1,5 +1,6 @@
 #  Copyright (c) 2021 IBM Corporation
 #  Henry Feldman, MD (CMO Development, IBM Watson Health)
+import json
 from fhir.resources.patient import Patient
 from fhir.resources.documentreference import DocumentReference
 from fhir.resources.domainresource import DomainResource
@@ -190,10 +191,12 @@ class FhirConverters:
             print("********** BEGIN PARSE FAILURE *************")
             print(json_dict)
             print("********** END PARSE FAILURE *************")
+        """
         if practicioner.Config:
             error:str = practicioner.Config.error_msg_templates['value_error.extra']
             print("***** ERROR IN FHIR: getCareGiverAsFhir(): "+error)
             practicioner= None
+        """
         return practicioner
 
     def getPracticionerRoleAsFhir(self, careGiver: database_classes.Caregiver, hospital:database_classes.Hospital ) -> PractitionerRole:
@@ -349,7 +352,7 @@ class FhirConverters:
             return practicioner
 
     # send the patient resource
-    async def send_fhir_to_connect(self, json, fhirserverurl):
+    async def send_fhir_to_connect(self, resource: str, fhirserverurl: str):
         """
         Sends the json payload to the Fhir Server URL (which must contain the resource type as in https://localhost:5000/fhir/MedicationRequest) which we assemble below.
         Note the destination is almost always localhost (where the connect service is running not necessarily the fhir server itself
@@ -362,7 +365,8 @@ class FhirConverters:
         """
         try:
             async with AsyncClient(verify=False) as client:
-                result = await client.post(fhirserverurl, json=json)
+                fhir_json = json.loads(resource)
+                result = await client.post(fhirserverurl, json=fhir_json)
                 print(f"Header: {result.text}")
         except:
             raise
