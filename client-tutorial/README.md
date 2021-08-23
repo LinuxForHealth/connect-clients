@@ -141,20 +141,26 @@ WTAF?? I hear you ask. Yeah, well the point of this demo was specifically not to
 ![kivygui.png](kivygui.png)
 
 ## Typing usage
-As an example healthcare application, type safety is very important and so where possible in the tutorial we will use type hints, so metho calls will have a return type hint (added in python 3). This will typically take the form of
+As an example healthcare application, type safety is very important and so where possible in the tutorial we will use type hints, so method calls will have a return type hint (added in python 3). This will typically take the form of
 an arrow and type definition in a method declaration like this:
 
 ```typedemo
     def getIcdCodesForAdmission(self, admissionId: int) -> List[DiagnosisIcd]:
 ```
-Python of course does not require return type hints but in a tutorial it helps to understand what is being passed around and is a good habit to get into during healthcare sofware development. Using type hinting is a similar idea to using an ORM that does data schema checking on startup
+
+or in object declarations we type the variable as in
+```
+    keyPatient:Patient = Patient()
+```
+
+Python of course does not require return type hints but in a tutorial it helps to understand what is being passed around and is a good habit to get into during healthcare sofware development, where type errors can be lethal. Using type hinting is a similar idea to using an ORM that does data schema checking on startup
 so that you are assured that the data in a given field is the data you are seeking, so if another developer changes the database schema your code will check if the database schema is still compatible (e.g. if you added a field the ORM should ignore it and use the existing fields
 - in other words your code is unchanged, but if someone deleted a field your model assumes is present that will throw a runtime error so that you never end up working with missing data). One of the problem with healthcare data is loose typing to start with, such as HL7 basically is a 1980s
 - delimited file format for text and has no concept of numeric typing, so a float and an int are mixed in the same field of a lab result (ugh) as are formatted numbers like a ratio. Now python is happy to automagically deal with that, but in a clinical context you have to assure that you are
-- comparing like to like (mixing types implicitly in mathematical operations is a risky move, and may not be valid even if the operation succeeds)
+- comparing like to like (mixing types implicitly in mathematical operations is a risky move, and may not be valid even if the operation "succeeds")
 
 ## Unit Testing
 The tutorial doesn't have defined unit tests, mostly because the tutorial is essentially a giant unit test itself. But feel free to put in your own unit tests to expand the tutorial
-co
+
 ##  The use case
-The basic tutorial use case is as follows: [tutorial use case](tutorial%20use%20case.md); this will take you onto a full clinical data example along with billing and FHIR encoding.
+The basic tutorial use case is as follows: [tutorial use case](tutorial_use_case.md); this will take you onto a full clinical data example (note ncessarily useful, but we try to hint at places where you would do something useful in the real world. But we will get all the clinical data types and process them, along with billing and FHIR encoding.
