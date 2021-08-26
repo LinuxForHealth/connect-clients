@@ -39,6 +39,19 @@ class AdtDao:
             careGiverDict[caregiver.CGID] = caregiver
         return careGiverDict
 
+    def saveCareGiver(self, careGiver:Caregiver)->Caregiver:
+        """
+        update or save the CareGiver entitiy to the database
+        @param careGiver: The caregiver to save
+        @type careGiver: Caregiver
+        @return: The updated caregiver
+        @rtype: Caregiver
+        """
+        global session
+        self.session.add(careGiver)
+        self.session.commit()
+        return careGiver
+
     def getCareGiverForCGID(self,CGID:int)->Caregiver:
         """
         return a given caregiver (rather than using the entire dict)
@@ -137,3 +150,16 @@ class AdtDao:
         """
         global session
         return self.session.query(Hospital).all()
+
+    def saveHospital(self,hospital:Hospital)->Hospital:
+        """
+        save or update the hospital
+        @param hospital:
+        @type hospital:
+        @return:
+        @rtype:
+        """
+        global session
+        self.session.add(hospital)
+        self.session.commit()
+        return hospital

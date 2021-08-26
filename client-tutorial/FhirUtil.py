@@ -9,6 +9,7 @@ from fhir.resources.narrative import Narrative
 from fhir.resources.practitioner import Practitioner
 from fhir.resources.practitionerrole import PractitionerRole
 from fhir.resources.diagnosticreport import DiagnosticReport
+from fhir.resources.organization import Organization
 from fhir.resources.extension import Extension
 from fhir.resources.attachment import Attachment
 from fhir.resources.humanname import HumanName
@@ -158,6 +159,69 @@ class FhirConverters:
             "valueQuantity": {"unit": labEvent.VALUEUOM, "value": labEvent.VALUENUM},
             "interpretation": [{"text": interpretation}]}
         return Observation.parse_obj(json_dict)
+
+    def getHospitalAsFhir(self, hospital:database_classes.Hospital)->Organization:
+        """
+        returns the json representation of the hospital class as the FhirResource Organization
+        @param hospital:
+        @type hospital:
+        @return:
+        @rtype:
+        """
+        json_dict = {
+              "resourceType": "Organization",
+              "id": "2.16.840.1.113883.19.5",
+              "text": {
+                "status": "generated",
+                "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>"+hospital.name+"\n"+hospital.street+"<br>\n"+ hospital.city+",  "+hospital.state+ "  "+hospital.zip+"</p>\n    </div>"
+              },
+              "identifier": [
+                {
+                "use": "official",
+                "type": {
+                "text": hospital.name
+                },
+                "system": hospital.website,
+                "value": "bidmc.org"
+                }
+                ],"active": "true",
+              "type": [
+                {
+                  "coding": [
+                    {
+                      "system": "http://snomed.info/sct",
+                      "code": "405608006",
+                      "display": "Academic Medical Center"
+                    },
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+                      "code": "prov"
+                    }
+                  ]
+                }
+              ],
+              "name": hospital.name,
+              "telecom": [
+                {
+                  "system": "phone",
+                  "value": hospital.telecom,
+                  "use": "work"
+                }
+              ],
+              "address": [
+                {
+                  "use": "work",
+                  "line": [
+                    hospital.street
+                  ],
+                  "city": hospital.city,
+                  "postalCode": hospital.zip,
+                  "country": hospital.country
+                }
+              ]
+            }
+        return Organization.parse_obj(json_dict)
+
 
     def getCareGiverAsFhir(self, careGiver: database_classes.Caregiver) -> Practitioner:
         """
@@ -363,13 +427,29 @@ class FhirConverters:
         :return: None
         :rtype: None
         """
-        try:
-            async with AsyncClient(verify=False) as client:
-                fhir_json = json.loads(resource)
-                result = await client.post(fhirserverurl, json=fhir_json)
-                print(f"Header: {result.text}")
-        except:
-            raise
+        if (fhirserverurl) :
+            try:
+                async with AsyncClient(verify=False) as client:
+                    fhir_json = json.loads(resource)
+                    result = await client.post(fhirserverurl, json=fhir_json)
+                    # print(f"Header: {result.text}")
+            except:
+                raise
+
+    async def sendFhirJsonStringToConnectLFH(self, fhirJson:str, resourceType:str):
+        """
+        This takes a FHIR resource repseneted as a string (cached in the database for instance( and sends it onto LFH Connect. we need to know the resource type, we need to modify our endpoint URL to include the resource type which we will get below.
+        @param fhirJson: The text of the fhir json
+        @type fhirJson:
+        @param resourceType: the name of the FHIR resource of this string (e.g. Patient)
+        @type resourceType: str
+        @return: None
+        @rtype: None
+        """
+        fhir_r4_externalserver_url:str = 'https://localhost:5000/fhir/'+resourceType
+        # pprint.pprint(fhirResource.json(), indent=1, depth=5, width=80)
+
+        await self.send_fhir_to_connect(fhirJson, fhir_r4_externalserver_url)
 
     async def sendFhirResourceToConnectLFH(self, fhirResource:DomainResource):
         """
@@ -382,7 +462,7 @@ class FhirConverters:
         """
 
         fhir_r4_externalserver_url:str = 'https://localhost:5000/fhir/'+fhirResource.resource_type
-        print(fhir_r4_externalserver_url)
+        print("direct FHIR url: " +fhir_r4_externalserver_url)
         # pprint.pprint(fhirResource.json(), indent=1, depth=5, width=80)
 
         await self.send_fhir_to_connect(fhirResource.json(), fhir_r4_externalserver_url)

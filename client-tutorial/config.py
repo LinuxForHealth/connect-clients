@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     application settings
     """
     # test server: 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/kafkaFhirDemoDb'
-    tutorial_mysql_url: str = 'mysql+pymysql://root:secret@localhost:3306/kafkaFhirDemoDb'
+    tutorial_mysql_url: str = 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/kafkaFhirDemoDb'
 
     class Config:
         case_sensitive = False

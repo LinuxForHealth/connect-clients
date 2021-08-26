@@ -51,10 +51,14 @@ class Hospital(Base):
 
     id = Column(MEDIUMINT, primary_key=True, autoincrement=True)
     name = Column(String(256), nullable=False, index=True)
-    subsidiary_of_id = Column(MEDIUMINT, ForeignKey('Hospital.id'))
+    subsidiary_of_id = Column(MEDIUMINT, ForeignKey('hospital.id'))
     street = Column(String(256), nullable=False, index=True)
     city = Column(String(128), nullable=False, index=False)
     state = Column(String(2), nullable=False, index=True)
+    zip = Column(String(16), nullable=False, index=True)
+    # note country must be in ISO 3166 format for FHIR
+    country = Column(String(128), nullable=False, index=True)
+    telecom = Column(String(128), nullable=False, index=False)
     has_inpatient = Column(TINYINT(1), nullable=False, index=True)
     has_ambulatory = Column(TINYINT(1), nullable=False, index=True)
     website = Column(String(256), nullable=False, index=True)
@@ -85,7 +89,7 @@ class Caregiver(Base):
     gender = Column(String(16), nullable=False, index=True)
     LABEL = Column(String(15))
     DESCRIPTION = Column(String(30))
-    works_for_hospital_id = Column(Integer, ForeignKey('Hospital.id'))
+    works_for_hospital_id = Column(Integer, ForeignKey('hospital.id'))
     fhir_json = Column(String(2000), nullable=False)
 
     def __str__(self):
@@ -507,7 +511,6 @@ class RadiologyReport(Base):
     Impression = Column(String(2048), index=True)
     acd_study_note = Column(TINYINT(1), nullable=False)
     fhir_json = Column(JSON)
-    linked_3d_study_id = Column(String(64), nullable=False, index=True)
 
     def __str__(self):
         elements = []

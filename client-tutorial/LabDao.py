@@ -57,3 +57,17 @@ class LabDao:
         """
         global session
         return self.session.query(LabEvent).filter(LabEvent.ROW_ID == rowId).one()
+
+
+    def saveLabEvent(self,labEvent:LabEvent)->LabEvent:
+        """
+        save or update the lab to the database
+        @param labEvent: the Lab entity
+        @type labEvent: labEvent
+        @return: labEvent after database saving
+        @rtype: LabEvent
+        """
+        global session
+        self.session.add(labEvent)
+        self.session.commit()
+        return labEvent
