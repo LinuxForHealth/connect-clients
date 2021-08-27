@@ -20,6 +20,9 @@ from typing import TypedDict
 import pprint
 import json
 import asyncio
+from config import get_settings
+
+settings = get_settings()
 
 class HospitalDict(TypedDict):
     id:int
@@ -43,7 +46,7 @@ adtDao = AdtDao()
 fhirUtil = FhirConverters()
 
 #get our patient entity from the database - we only have the one patients
-patient = patientDao.getPatient('959595')
+patient = patientDao.getPatient(settings.tutorial_subject_id)
 print(patientDao.getPatientSummary(patient))
 # print the patient info to the screnn
 print('sending to fhir converter')

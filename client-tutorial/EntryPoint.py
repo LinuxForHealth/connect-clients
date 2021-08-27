@@ -16,6 +16,8 @@ from kivy.uix.textinput import TextInput
 from datetime import datetime
 from DateUtil import calculate_age
 from billing import billing
+from config import get_settings
+
 
 # subjectId 48632
 # SELECT * FROM `noteevents` WHERE MATCH(TEXT) against ('post-obstructive pneumonia', in natural language mode);
@@ -27,6 +29,8 @@ from kivy.properties import (
 from kivy.vector import Vector
 from kivy.clock import Clock
 
+settings = get_settings()
+
 fhir_r4_externalserver_patient = 'https://localhost:5000/fhir/Patient'
 
 fhir_r4_externalserver_notes = 'https://localhost:5000/fhir/DocumentReference'
@@ -37,7 +41,7 @@ fhir_r4_externalserver_lab = 'https://localhost:5000/fhir/Observation'
 
 fhir_r4_externalserver_Radiology = 'https://localhost:5000/fhir/DiagnosticReport'
 
-patientSubjectId = 959595
+patientSubjectId = settings.tutorial_subject_id
 
 globalPatient = None
 
@@ -45,7 +49,7 @@ globalNoteEvent = None
 
 LfhTutorialApp = None
 
-mrnField = TextInput(multiline=False, text="959595", cursor_blink=True, font_size=36)
+mrnField = TextInput(multiline=False, text=str(patientSubjectId), cursor_blink=True, font_size=36)
 
 boxLayout = None
 '''

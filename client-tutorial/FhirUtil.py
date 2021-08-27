@@ -462,7 +462,6 @@ class FhirConverters:
         """
 
         fhir_r4_externalserver_url:str = 'https://localhost:5000/fhir/'+fhirResource.resource_type
-        print("direct FHIR url: " +fhir_r4_externalserver_url)
         # pprint.pprint(fhirResource.json(), indent=1, depth=5, width=80)
 
         await self.send_fhir_to_connect(fhirResource.json(), fhir_r4_externalserver_url)
