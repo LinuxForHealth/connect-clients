@@ -1,0 +1,34 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+ethereum="python ethereum/main.py"
+check-format="black -t py38 --check --diff connect tests"
+format="black -t py38 connect tests"
+
+[packages]
+asyncio-nats-client = "*"
+fastapi = "*"
+pyaml = "*"
+requests = "*"
+"fhir.resources" = "*"
+httpx = "*"
+slowapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+nkeys = "*"
+wheel = "*"
+web3 = "*"
+eth_account = "*"
+hexbytes = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-asyncio = "*"
+flake8 = "*"
+black = {extras = ["d"], version = "*"}
+pre-commit = "*"
+
+[pipenv]
+allow_prereleases = true
