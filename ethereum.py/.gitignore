@@ -1,0 +1,6 @@
+# ide files
+.idea
+
+# local config files
+venv
+
