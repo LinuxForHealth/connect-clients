@@ -1,8 +1,8 @@
-from databaseUtil import DatabaseUtil
-from database_classes import Patient, Payer
+from .databaseUtil import DatabaseUtil
+from .database_classes import Patient, Payer
 from sqlalchemy import select
 from typing import List
-from InsuranceDao import InsuranceDao, InsuranceCompanyDict
+from .InsuranceDao import InsuranceDao, InsuranceCompanyDict
 import string
 
 class PatientsDao:

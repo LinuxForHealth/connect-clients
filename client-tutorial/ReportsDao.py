@@ -1,9 +1,8 @@
 #  Copyright (c) 2021 IBM Corporation
 #  Henry Feldman, MD (CMO Development, IBM Watson Health)
-from databaseUtil import DatabaseUtil
-from sqlalchemy import select
+from .databaseUtil import DatabaseUtil
 from typing import List
-from database_classes import RadiologyReport, EKGReport
+from .database_classes import RadiologyReport, EKGReport
 
 
 class ReportsDao:

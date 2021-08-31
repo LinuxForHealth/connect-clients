@@ -6,8 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from database_classes import *
-from config import get_settings
+from .config import get_settings
 
 session=None
 engine=None

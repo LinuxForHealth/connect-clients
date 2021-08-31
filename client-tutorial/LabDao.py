@@ -1,6 +1,5 @@
-from databaseUtil import DatabaseUtil
-from database_classes import DLabItem, LabEvent
-from sqlalchemy import select
+from .databaseUtil import DatabaseUtil
+from .database_classes import DLabItem, LabEvent
 from typing import List, TypedDict
 
 

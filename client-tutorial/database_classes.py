@@ -2,9 +2,13 @@
 from sqlalchemy import orm
 from sqlalchemy import Column, ForeignKey, DECIMAL, Date, DateTime, Index, Integer, JSON, String, Text, text
 from sqlalchemy.dialects.mysql import INTEGER, MEDIUMINT, MEDIUMTEXT, SMALLINT, TINYINT, VARCHAR
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from typing import List, TypedDict
-from MedActionPotential import MedicationActionPotential
+
+from sqlalchemy.ext.mypy.names import COLUMN
+
+from .MedActionPotential import MedicationActionPotential
 from datetime import date, datetime
 import string
 
@@ -223,7 +227,6 @@ class Payer(Base):
                 skip = True
         return ', '.join(elements)
 
-
 class Patient(Base):
     __tablename__ = 'PATIENTS'
 
@@ -260,6 +263,34 @@ class Patient(Base):
         """
         today = date.today()
         return today.year - self.DOB.year - ((today.month, today.day) < (self.DOB.month, self.DOB.day))
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
+
+class PatientCoverage(Base):
+    __tablename__ = 'patient_coverage'
+    """
+    this is a record for a payer account for the patient (links to payer, patient and account info)
+    """
+    id = Column(MEDIUMINT, primary_key=True)
+    patient_id = Column(ForeignKey('PATIENTS.ROW_ID', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
+    payer_id = Column(ForeignKey('payer.id', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
+    payer_plan_id = Column(Integer, nullable=False)
+    member_id = Column(MEDIUMINT, nullable=False)
+    fhir_json = Column(VARCHAR(2048))
+
+
+    patient = relationship('Patient')
+    payer = relationship('Payer')
 
     def __str__(self):
         elements = []

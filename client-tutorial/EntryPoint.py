@@ -1,13 +1,12 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy import app
-from PatientsDao import PatientsDao
-from database_classes import Patient, Noteevent, Admission, DRGCode, DIcdDiagnoses, DiagnosisIcd
-from MedicationDao import MedicationDao
-from NoteEventDao import NoteEventDao
-from LabDao import LabDao
-from InsuranceDao import InsuranceDao, InsuranceCompanyDict
-from ADTDao import AdtDao
+from .PatientsDao import PatientsDao
+from .database_classes import Patient, Noteevent, Admission, DRGCode, DIcdDiagnoses, DiagnosisIcd
+from .MedicationDao import MedicationDao
+from .NoteEventDao import NoteEventDao
+from .LabDao import LabDao
+from .InsuranceDao import InsuranceDao, InsuranceCompanyDict
 from httpx import AsyncClient
 import asyncio
 from kivy.app import App
@@ -15,8 +14,8 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from datetime import datetime
 from DateUtil import calculate_age
-from billing import billing
-from config import get_settings
+from .billing import billing
+from .config import get_settings
 
 
 # subjectId 48632

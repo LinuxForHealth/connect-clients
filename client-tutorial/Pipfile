@@ -19,6 +19,7 @@ dnspython = "*"
 docutils = "*"
 email-validator = "*"
 enum21 = "*"
+fastapi = "*"
 "fhir.resources" = "*"
 filelock = "*"
 greenlet = "*"
@@ -47,6 +48,7 @@ sqlalchemy-basemodel = "*"
 SQLAlchemyTypes = "*"
 typing-extensions = "*"
 urllib3 = "*"
+uvicorn = "*"
 validation21 = "*"
 
 [dev-packages]
@@ -57,4 +59,3 @@ pre-commit = "*"
 
 [pipenv]
 allow_prereleases = true
-

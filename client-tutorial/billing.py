@@ -1,6 +1,6 @@
-import ADTDao
-import PatientsDao
-from database_classes import Patient
+from .ADTDao import AdtDao
+from .PatientsDao import PatientsDao
+from .database_classes import Patient
 
 class billing():
 
@@ -12,11 +12,12 @@ class billing():
         :return: nothing
         :rtype: Nonetype
         """
-        patient:Patient = PatientsDao.getPatient(959595)
+        patientDao:PatientsDao = PatientsDao()
+        patient:Patient = patientDao.getPatient(959595)
         print(patient.payer)
         print(patient.textSummary())
 
-        adtDao = ADTDao.AdtDao()
+        adtDao = AdtDao()
         icdDict = adtDao.getICDDefinitions()
         print(len(icdDict.keys()))
         for admission in adtDao.getAdmissionsForSubjectId(patient.SUBJECT_ID):

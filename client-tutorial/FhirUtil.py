@@ -14,7 +14,7 @@ from fhir.resources.extension import Extension
 from fhir.resources.attachment import Attachment
 from fhir.resources.humanname import HumanName
 from datetime import date
-import database_classes
+from .database_classes import *
 import cgi
 import base64
 from httpx import AsyncClient
