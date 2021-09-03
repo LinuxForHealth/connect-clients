@@ -1,6 +1,6 @@
-from .databaseUtil import DatabaseUtil
-from .database_classes import Payer
-from typing import TypedDict
+from databaseUtil import DatabaseUtil
+from database_classes import Payer, PatientCoverage, CoveragePlanData
+from typing import TypedDict, List
 
 
 class InsuranceCompanyDict(TypedDict):
@@ -23,6 +23,14 @@ class InsuranceDao:
         self.session = dbUtil.getSession()
         self.payerDict = self.fetchPayerDict()
 
+    def getAllPayers(self)->List[Payer]:
+        """
+        gets the list of all the Payers
+        @return: payerList
+        @rtype: List[Payer]
+        """
+        global session
+        return self.session.query(Payer).all
 
     def fetchPayerDict(self)->InsuranceCompanyDict:
         """
@@ -38,3 +46,51 @@ class InsuranceDao:
 
     def getPayerDict(self)->InsuranceCompanyDict:
         return self.payerDict
+
+    def getAllPatientCoverage(self)->List[PatientCoverage]:
+        global session
+        return self.session.query(PatientCoverage).all
+
+    def getAllPatientCoverageForPatient(self, subjectId:int)->List[PatientCoverage]:
+        """
+        get the patient's coverage record from the database
+        @param subjectId:
+        @type subjectId:
+        @return: coverageList
+        @rtype: List[PatientCoverage]
+        """
+        global session
+        return self.session.query(PatientCoverage).all
+
+    def getPatientCoverage(self, id:int)->PatientCoverage:
+        """
+        gets a specific patient coverage records by the id
+        @return: patientCoverage
+        @rtype: PatientCoverage
+        """
+        global session
+        return self.session.query(PatientCoverage).get(id)
+
+    def getPayer(self, id:int):
+        """
+        get payer by id
+        @param id: the payer id
+        @type id:
+        @return: the Payer
+        @rtype: Payer
+        """
+        global session
+        return self.session.query(Payer).filter(Payer.id==id).one()
+
+    def savePatientCoverage(self, patientCoverage:PatientCoverage)->PatientCoverage:
+        """
+        save the patient coverage back to the database and returned the persisted version
+        @param patientCoverage:
+        @type patientCoverage:
+        @return: patientCoverage
+        @rtype: PatientCoverage
+        """
+        global session
+        self.session.add(patientCoverage)
+        self.session.commit()
+        return patientCoverage

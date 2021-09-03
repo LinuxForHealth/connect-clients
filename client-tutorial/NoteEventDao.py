@@ -49,6 +49,7 @@ class NoteEventDao:
         @return: the requested NoteEvent
         @rtype: Noteevent
         """
+        global session
         return self.session.query(Noteevent).get(id)
 
 

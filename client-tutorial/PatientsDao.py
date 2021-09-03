@@ -1,8 +1,8 @@
-from .databaseUtil import DatabaseUtil
-from .database_classes import Patient, Payer
+from databaseUtil import DatabaseUtil
+from database_classes import Patient, Payer
 from sqlalchemy import select
 from typing import List
-from .InsuranceDao import InsuranceDao, InsuranceCompanyDict
+from InsuranceDao import InsuranceDao, InsuranceCompanyDict
 import string
 
 class PatientsDao:
@@ -52,6 +52,18 @@ class PatientsDao:
         @return: the text description
         @rtype: str
         """
-
         payer: Payer = self.insuranceDao.getPayerDict()[patient.insurance]
         return f'Patient: {patient.last_name}, {patient.first_name}\nMRN: {patient.SUBJECT_ID}\nInsurance: {payer.Name} {payer.plan_type}\nDOB: {patient.DOB.strftime("%m/%d/%Y")} ({patient.calculate_age()})\n\n{patient.street}, {patient.city} {patient.state} {patient.zip}'
+
+    def savePatient(self, patient:Patient)->Patient:
+        """
+        saves the patient to the database and returns the persisted version
+        @param patient:
+        @type patient:
+        @return: patient
+        @rtype: Patient
+        """
+        global session
+        self.session.add(patient)
+        self.session.commit()
+        return patient

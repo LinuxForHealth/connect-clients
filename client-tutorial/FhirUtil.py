@@ -10,16 +10,20 @@ from fhir.resources.practitioner import Practitioner
 from fhir.resources.practitionerrole import PractitionerRole
 from fhir.resources.diagnosticreport import DiagnosticReport
 from fhir.resources.organization import Organization
+from fhir.resources.reference import Reference
+from fhir.resources.coverageeligibilityrequest import CoverageEligibilityRequest
+from fhir.resources.coverage import Coverage
 from fhir.resources.extension import Extension
 from fhir.resources.attachment import Attachment
 from fhir.resources.humanname import HumanName
 from datetime import date
-from .database_classes import *
+from database_classes import Patient, Noteevent, LabEvent, DLabItem, Caregiver, Hospital, EKGReport, RadiologyReport, Payer, PatientCoverage, CoveragePlanData
 import cgi
 import base64
 from httpx import AsyncClient
 import asyncio
 import pprint
+from datetime import datetime
 
 class FhirConverters:
     """
@@ -27,7 +31,7 @@ class FhirConverters:
     entities from SqlAlchemy (from database_classes.py) and converts them handily to full fhir implementations.
     """
 
-    def getPatientAsFhir(self, dbpatient: database_classes.Patient) -> Patient:
+    def getPatientAsFhir(self, dbpatient: Patient) -> Patient:
         """
         returns the json representation of the Patient class as the Fhir Resource Patient
         @param dbpatient:
@@ -58,7 +62,7 @@ class FhirConverters:
         fhirPatient = Patient.parse_obj(json_dict)
         return fhirPatient
 
-    def getRadiologyReportAsFhir(self,report:database_classes.RadiologyReport)->DiagnosticReport:
+    def getRadiologyReportAsFhir(self,report:RadiologyReport)->DiagnosticReport:
         """
         returns a fhir resource of a radiology report entity to FHIR
         @param report: a radiology report
@@ -80,7 +84,7 @@ class FhirConverters:
                                      "system": "http://https://mimic.physionet.org/identifiers/subjectid"}]}
 
 
-    def getEKGReportAsFhir(self,report:database_classes.EKGReport)->DiagnosticReport:
+    def getEKGReportAsFhir(self,report:EKGReport)->DiagnosticReport:
         """
         returns a fhir resource of a EKG report entity to FHIR
         @param report: an EKG report
@@ -100,7 +104,7 @@ class FhirConverters:
                                      "type": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v2-0203"}]},
                                      "system": "http://https://mimic.physionet.org/identifiers/subjectid"}]}
 
-    def getNoteEventsAsFhir(self, noteEvent: database_classes.Noteevent) -> DocumentReference:
+    def getNoteEventsAsFhir(self, noteEvent: Noteevent) -> DocumentReference:
         """
         returns the json representation of the NoteEvent class as the FhirResource DocumentReference
         @param noteEvent:
@@ -127,8 +131,8 @@ class FhirConverters:
                                      "system": "http://https://mimic.physionet.org/identifiers/subjectid"}]}
         return DocumentReference.parse_obj(json_dict)
 
-    def getLabEventAsFhir(self, labEvent: database_classes.LabEvent,
-                          labDefinition: database_classes.DLabItem) -> Observation:
+    def getLabEventAsFhir(self, labEvent: LabEvent,
+                          labDefinition: DLabItem) -> Observation:
         """
         returns the json representation of the Observation (lab) class as the FhirResource Observation
         @param labEvent: the lab from the database
@@ -160,7 +164,7 @@ class FhirConverters:
             "interpretation": [{"text": interpretation}]}
         return Observation.parse_obj(json_dict)
 
-    def getHospitalAsFhir(self, hospital:database_classes.Hospital)->Organization:
+    def getHospitalAsFhir(self, hospital:Hospital)->Organization:
         """
         returns the json representation of the hospital class as the FhirResource Organization
         @param hospital:
@@ -223,7 +227,7 @@ class FhirConverters:
         return Organization.parse_obj(json_dict)
 
 
-    def getCareGiverAsFhir(self, careGiver: database_classes.Caregiver) -> Practitioner:
+    def getCareGiverAsFhir(self, careGiver: Caregiver) -> Practitioner:
         """
         returns the json representation of the Caregiver (practicioner) class as the FhirResource Practicioner
         @param careGiver:
@@ -263,7 +267,7 @@ class FhirConverters:
         """
         return practicioner
 
-    def getPracticionerRoleAsFhir(self, careGiver: database_classes.Caregiver, hospital:database_classes.Hospital ) -> PractitionerRole:
+    def getPracticionerRoleAsFhir(self, careGiver: Caregiver, hospital:Hospital ) -> PractitionerRole:
         """
         returns the json representation of the PractitionerRole (job title essentially) class as the FhirResource PractitionerRole
         @param careGiver: the enetity for a practicioner in the EMR/DB
@@ -389,7 +393,7 @@ class FhirConverters:
 
         return PractitionerRole.parse_obj(json_dict)
 
-    def getPracticionerWithRoleAsFhir(self, careGiver:database_classes.Caregiver, hospital:database_classes.Hospital )->Practitioner:
+    def getPracticionerWithRoleAsFhir(self, careGiver:Caregiver, hospital:Hospital )->Practitioner:
         """
         Retuend a Practicioner resource with the role set as the "contained"
         @param careGiver: the doctor/nurse/etc
@@ -465,3 +469,153 @@ class FhirConverters:
         # pprint.pprint(fhirResource.json(), indent=1, depth=5, width=80)
 
         await self.send_fhir_to_connect(fhirResource.json(), fhir_r4_externalserver_url)
+
+    def getPlanData(self, coveragePlanData:CoveragePlanData)-> {}:
+        """
+        returns the json for the plan data for eligibility
+        @param coveragePlanData:
+        @type coveragePlanData:
+        @return: json_dict
+        @rtype: Dict
+        """
+        json_dict = {
+                  "type": {
+                    "coding": [
+                      {
+                        "system": "http://terminology.hl7.org/CodeSystem/coverage-class",
+                        "code": coveragePlanData.type,
+                        "name": coveragePlanData.name
+                      }
+                    ]
+                  },
+                  "value": coveragePlanData.value
+                }
+        return json_dict
+
+    def getBeneficiary(self, coverage:PatientCoverage)->Reference:
+        """
+        gets the patient reference as a logical reference using the patient's id number (SubjectId)
+        @param coverage: coverage
+        @type coverage: PatientCoverage
+        @return: referenceObject
+        @rtype: {}
+        """
+        json_dict = {
+                "beneficiary": {
+                    "identifier": [
+                        {
+                            "type": {
+                                "coding": [
+                                    {
+                                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                                        "code": "MR"
+                                    }
+                                ]
+                            },
+                            "value": coverage.patient_id
+                        }
+                    ]
+                }
+            }
+        return Reference.parse_obj(json_dict)
+
+
+
+    def getPayerReference(self, payer_id:int)->Reference:
+        """
+        gets the patient reference as a logical reference using the payer's id number (id field)
+        @param coverage: coverage
+        @type coverage: PatientCoverage
+        @return: referenceObject
+        @rtype: {}
+        """
+        json_dict = {
+                "Organization": {
+                    "identifier": [
+                        {
+                            "type": {
+                                "coding": [
+                                    {
+                                        "system": "http://terminology.hl7.org/CodeSystem/v3-IdentifierScope",
+                                        "code": "OBJ"
+                                    }
+                                ]
+                            },
+                            "value": payer_id
+                        }
+                    ]
+                }
+            }
+        return Reference.parse_obj(json_dict)
+
+
+    def getCoverageAsFhir(self, patient:Patient, coverage:PatientCoverage, payer:Payer)->Coverage:
+        """
+        returns the json representation of the CoverageEligibilityRequest (check if the patient has this actual coverage) class as the FhirResource CoverageEligibilityRequest
+
+        @param patient:
+        @type patient: database_classes.Patient
+        @param coverage:
+        @type coverage: database_classes.PatientCoverage
+        @param payer:
+        @type payer: database_classes.Payer
+        @return:
+        @rtype:
+        """
+
+        result = []
+        for planInfo in coverage.coveragePlanData:
+            data = self.getPlanData(planInfo)
+            result.append(data)
+
+        start:datetime = datetime.strptime('Jan 1 '+ str(date.today().year)+' 12:00AM', '%b %d %Y %I:%M%p')
+        end:datetime = datetime.strptime('Dec 31 '+ str(date.today().year)+' 11:59PM', '%b %d %Y %I:%M%p')
+        # we set the coverage period to the current year
+        print(coverage)
+        json_dict = {"resourceType": "Coverage",
+                      "id": str(coverage.id),
+                      "text": {
+                        "status": "generated",
+                        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">"+str(coverage)+"</div>"
+                      },
+                      "identifier": [
+                        {
+                          "system": "http://benefitsinc.com/certificate",
+                          "value": coverage.payer_plan_id
+                        }
+                      ],
+                      "status": "active",
+                      "type": {
+                        "coding": [
+                          {
+                            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                            "code": "EHCPOL",
+                            "display": "extended healthcare"
+                          }
+                        ]
+                      },
+                     "subscriberId": coverage.member_id,
+                     "beneficiary": self.getBeneficiary(coverage)
+        ,
+                      "dependent": "0",
+                      "relationship": "X",
+                        {
+                        "coding": [
+                          {
+                            "code": "self"
+                          }
+                        ]
+                      }
+        ,
+                    "period": {
+                                  "start": start,
+                                  "end": end
+                              },
+                              "payor": [
+            {
+                "reference": self.getPayerReference(coverage.payer_id)
+            }
+        ],
+        "class": [result.append(data)]
+        }
+        return Coverage.parse_obj(json_dict)
