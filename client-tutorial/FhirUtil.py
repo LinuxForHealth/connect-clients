@@ -595,7 +595,7 @@ class FhirConverters:
                         ]
                       },
                      "subscriberId": coverage.member_id,
-                     "beneficiary": self.getBeneficiary(coverage)
+                     "beneficiary": [self.getBeneficiary(coverage)]
         ,
                       "dependent": "0",
                       "relationship": "X",
