@@ -598,7 +598,7 @@ class FhirConverters:
                      "beneficiary": [self.getBeneficiary(coverage)]
         ,
                       "dependent": "0",
-                      "relationship": "X",
+                      "relationship":
                         {
                         "coding": [
                           {
