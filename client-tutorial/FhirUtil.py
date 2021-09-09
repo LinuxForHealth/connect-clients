@@ -501,22 +501,19 @@ class FhirConverters:
         @rtype: {}
         """
         json_dict = {
-                "beneficiary": {
-                    "identifier": [
-                        {
-                            "type": {
-                                "coding": [
-                                    {
-                                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
-                                        "code": "MR"
-                                    }
-                                ]
-                            },
-                            "value": coverage.patient_id
-                        }
-                    ]
+            "identifier":
+                {
+                    "type": {
+                        "coding": [
+                            {
+                                "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                                "code": "MR"
+                            }
+                        ]
+                    },
+                    "value": coverage.patient_id
                 }
-            }
+        }
         return Reference.parse_obj(json_dict)
 
 
@@ -530,8 +527,7 @@ class FhirConverters:
         @rtype: {}
         """
         json_dict = {
-                "Organization": {
-                    "identifier": [
+                    "identifier":
                         {
                             "type": {
                                 "coding": [
@@ -543,9 +539,7 @@ class FhirConverters:
                             },
                             "value": payer_id
                         }
-                    ]
-                }
-            }
+                    }
         return Reference.parse_obj(json_dict)
 
 
@@ -578,12 +572,12 @@ class FhirConverters:
                         "status": "generated",
                         "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">"+str(coverage)+"</div>"
                       },
-                      "identifier": [
+                      "identifier":
                         {
                           "system": "http://benefitsinc.com/certificate",
                           "value": coverage.payer_plan_id
                         }
-                      ],
+                      ,
                       "status": "active",
                       "type": {
                         "coding": [

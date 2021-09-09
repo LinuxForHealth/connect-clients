@@ -8,7 +8,7 @@ from typing import List, TypedDict
 
 from sqlalchemy.ext.mypy.names import COLUMN
 
-from MedActionPotential import MedicationActionPotential
+from .MedActionPotential import MedicationActionPotential
 from datetime import date, datetime
 import string
 

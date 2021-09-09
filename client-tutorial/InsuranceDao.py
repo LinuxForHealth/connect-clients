@@ -1,5 +1,5 @@
-from databaseUtil import DatabaseUtil
-from database_classes import Payer, PatientCoverage, CoveragePlanData
+from .databaseUtil import DatabaseUtil
+from .database_classes import Payer, PatientCoverage, CoveragePlanData
 from typing import TypedDict, List
 
 
