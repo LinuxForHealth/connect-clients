@@ -9,45 +9,12 @@ $('#payerselect').on('change', function()
     console.log(value)
   });
 
-$('#payer-form-button').click(function(event) {
-    // Prevent redirection with AJAX for payer form
-    var form = $('#payer-form');
-    var form_id = 'payer-form';
-    var url = form.prop('action');
-    var type = form.prop('method');
-    var formData = getPayerFormData(form_id);
-
-    // submit form via AJAX
-    send_form(form, form_id, url, type, modular_ajax, formData);
-};
-
 function getPayerFormData(form) {
     // creates a FormData object and adds chips text
     var formData = new FormData(document.getElementById(form));
-//    for (var [key, value] of formData.entries()) { console.log('formData', key, value);}
     console.log(formData)
     return formData
-}
-
-function jqAlert(outputMsg, titleMsg, onCloseCallback) {
-    if (!titleMsg)
-        titleMsg = 'Alert';
-
-    if (!outputMsg)
-        outputMsg = 'No Message to Display.';
-
-    $("<div></div>").html(outputMsg).dialog({
-        title: titleMsg,
-        resizable: false,
-        modal: true,
-        buttons: {
-            "OK": onCloseCallback,
-            "Cancel": function() {
-          $( this ).dialog( "destroy" );
-            }
-
-        },
-    });
+};
 
 </script>
 <!--
@@ -75,10 +42,10 @@ function jqAlert(outputMsg, titleMsg, onCloseCallback) {
                 <div class="row">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon3">Payer Name</span>
-                        <select class="form-select" aria-label="Select Payer to become" id="payerselect">
+                        <select class="form-select" aria-label="Select Payer to become" id="payerselect" name="payerselect">
                             <option selected value="">Use this to select the payer to view</option>
                             {% for payer in payerNames %}
-                            <option value="{{ payer }}">{{ payer }}</option>
+                                <option value="{{ payer }}">{{ payer }}</option>
                             {% endfor %}
                         </select>
                     </div>
