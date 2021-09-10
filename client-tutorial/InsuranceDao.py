@@ -30,7 +30,7 @@ class InsuranceDao:
         @rtype: List[Payer]
         """
         global session
-        return self.session.query(Payer).all
+        return self.session.query(Payer).all()
 
     def fetchPayerDict(self)->InsuranceCompanyDict:
         """
