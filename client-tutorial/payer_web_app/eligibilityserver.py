@@ -13,24 +13,33 @@ from typing import List
 from ..database_classes import Patient, Payer
 from ..PatientsDao import PatientsDao
 from typing import TypedDict, List
+import uuid
+import secrets
+
 
 csrf_protect = CSRFProtect()
 
 insuranceDao:InsuranceDao = InsuranceDao()
 
 payerDict = insuranceDao.fetchPayerDict()
+payerNameDict = {}
 
+secret_key = secrets.token_urlsafe(16)
 
 app = Flask(__name__)
 patientDao: PatientsDao = PatientsDao()
+print(secret_key)
+# app.config['SECRET_KEY'] = secret_key
+app.config['WTF_CSRF_ENABLED'] = False
 
 # Setup session
-Session(app)
+sess = Session(app)
+sess.init_app(app)
 
 payerList: List[Payer] = insuranceDao.getAllPayers()
 
-# Setup WTForms CSRFProtect
-csrf_protect.init_app(app)
+for payer in payerList:
+    payerNameDict[payer.Name] = payer
 
 # Define bootstrap_is_hidden_field for flask-bootstrap's bootstrap_wtf.html
 from wtforms.fields import HiddenField
@@ -44,15 +53,16 @@ app.jinja_env.globals['bootstrap_is_hidden_field'] = is_hidden_field_filter
 
 
 
-@app.route('/payer_select', methods=['GET', 'POST'])
-@click.argument("payerSelect")
-def selectPayer(payerId:int):
+@app.route('/payer', methods=['POST'])
+@click.argument("payer")
+def selectPayer():
     global payerDict
     if request.method == 'POST':
-        payer = payerDict[payerId]
-        memberList = patientDao.getPatientForPayer(payerId)
+        payerName = request.form["payerselect"]
+        payer = payerNameDict[payerName]
+        memberList = patientDao.getPatientForPayer(payer.id)
     return render_template('view_requests.html',
-                           payer=payer, memberList=memberList)
+                           payer=payer, memberList=memberList, endpoint=url_for('/payer'))
 
 # The User page is accessible to authenticated users (users that have logged in)
 @app.route('/payer', methods=['GET'])
