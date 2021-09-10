@@ -12,10 +12,14 @@ from ..InsuranceDao import InsuranceDao
 from typing import List
 from ..database_classes import Patient, Payer
 from ..PatientsDao import PatientsDao
+from typing import TypedDict, List
 
 csrf_protect = CSRFProtect()
 
 insuranceDao:InsuranceDao = InsuranceDao()
+
+payerDict = insuranceDao.fetchPayerDict()
+
 
 app = Flask(__name__)
 patientDao: PatientsDao = PatientsDao()
@@ -39,23 +43,25 @@ def is_hidden_field_filter(field):
 app.jinja_env.globals['bootstrap_is_hidden_field'] = is_hidden_field_filter
 
 
+
+@app.route('/payer_select', methods=['GET', 'POST'])
+@click.argument("payerSelect")
+def selectPayer(payerId:int):
+    global payerDict
+    if request.method == 'POST':
+        payer = payerDict[payerId]
+        memberList = patientDao.getPatientForPayer(payerId)
+    return render_template('view_requests.html',
+                           payer=payer, memberList=memberList)
+
 # The User page is accessible to authenticated users (users that have logged in)
 @app.route('/payer', methods=['GET'])
 def payer_list():
+    global payerDict
     payerNames = []
-    for payer in insuranceDao.getAllPayers():
+    for payer in payerDict.values():
         payerNames.append(payer.Name)
-    return render_template('payer_base.html', payerNames)
-
-
-@app.route('/payer/select/<payerId>', methods=['GET', 'POST'])
-@click.argument("payerId")
-def selectPayer(payerId:int):
-    if request.method == 'POST':
-        payer = insuranceDao.getPayer(payerId)
-        print(payer)
-    return render_template('view_requests.html',
-                           payer=payer)
+    return render_template('payer_base.html', payerNames = payerNames)
 
 @app.route("/")
 def hello_world():

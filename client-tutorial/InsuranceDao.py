@@ -45,6 +45,8 @@ class InsuranceDao:
         return payerDict
 
     def getPayerDict(self)->InsuranceCompanyDict:
+        if len(self.payerDict.keys()) < 1:
+            self.payerDict = self.fetchPayerDict()
         return self.payerDict
 
     def getAllPatientCoverage(self)->List[PatientCoverage]:

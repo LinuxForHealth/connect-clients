@@ -41,7 +41,6 @@ class PatientsDao:
         """
         global session
         global globalPatient
-        global globalMilitaryInfo
         return self.session.query(Patient).filter(Patient.SUBJECT_ID==subjectId).one()
 
     def getPatientSummary(self, patient:Patient)->str:
@@ -67,3 +66,9 @@ class PatientsDao:
         self.session.add(patient)
         self.session.commit()
         return patient
+
+    def getPatientForPayer(self, payer_id:int)->List[Patient]:
+        global session
+        global globalPatient
+        global globalMilitaryInfo
+        return self.session.query(Patient).filter(Patient.insurance == payer_id).all()
