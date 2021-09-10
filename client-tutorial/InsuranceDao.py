@@ -51,7 +51,7 @@ class InsuranceDao:
 
     def getAllPatientCoverage(self)->List[PatientCoverage]:
         global session
-        return self.session.query(PatientCoverage).all
+        return self.session.query(PatientCoverage).all()
 
     def getAllPatientCoverageForPatient(self, subjectId:int)->List[PatientCoverage]:
         """
@@ -62,7 +62,7 @@ class InsuranceDao:
         @rtype: List[PatientCoverage]
         """
         global session
-        return self.session.query(PatientCoverage).all
+        return self.session.query(PatientCoverage).all()
 
     def getPatientCoverage(self, id:int)->PatientCoverage:
         """
