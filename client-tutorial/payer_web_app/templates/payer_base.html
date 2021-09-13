@@ -6,6 +6,7 @@
 $('#payerselect').on('change', function()
 {
     value= this.value;
+    alert(value)
     console.log(value)
   });
 
@@ -15,6 +16,7 @@ function getPayerFormData(form) {
     console.log(formData)
     return formData
 };
+
 
 </script>
 <!--
@@ -42,22 +44,28 @@ function getPayerFormData(form) {
                 <div class="row">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon3">Payer Name</span>
-                        <select class="form-select" aria-label="Select Payer to become" id="payerselect" name="payerselect">
+                        <select class="form-select" aria-label="Select Payer to view" id="payerselect"
+                                name="payerselect">
                             <option selected value="">Use this to select the payer to view</option>
                             {% for payer in payerNames %}
-                                <option value="{{ payer }}">{{ payer }}</option>
+                            <option value="{{ payer }}">{{ payer }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <button type="submit" class="btn btn-primary float-end" id="payer-form-button">Submit</button>
-                </form>
+        </form>
+    </div>
+    {% if currentPayerName != 'None' %}
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">NAME: {{ currentPayerName }}</h2>
+                <div class="accordion-body">
+                    <strong>Address:</strong>{{ currentPayerAddress }}
+                  </div>
             </div>
-</div>
-</div>
+        </div>
+    {% endif %}
 </div>
 
 {% endblock %}

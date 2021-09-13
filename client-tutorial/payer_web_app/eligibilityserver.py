@@ -53,7 +53,7 @@ app.jinja_env.globals['bootstrap_is_hidden_field'] = is_hidden_field_filter
 
 
 
-@app.route('/payer', methods=['POST'])
+@app.route('/payer', methods=['GET', 'POST'])
 @click.argument("payer")
 def selectPayer():
     global payerDict
@@ -61,8 +61,15 @@ def selectPayer():
         payerName = request.form["payerselect"]
         payer = payerNameDict[payerName]
         memberList = patientDao.getPatientForPayer(payer.id)
-    return render_template('view_requests.html',
-                           payer=payer, memberList=memberList, endpoint=url_for('/payer'))
+        payerAddress:str = payer.street+'<br>'+payer.city+", "+payer.state+" "+payer.zip
+        return render_template('view_requests.html',
+                               payer=payer, memberList=memberList, endpoint=url_for('/payer'), currentPayerName=payer.Name, currentPayerAddress=payerAddress)
+    elif request.method == 'GET':
+        payerNames = []
+        for payer in payerDict.values():
+            payerNames.append(payer.Name)
+        return render_template('payer_base.html', payerNames=payerNames, currentPayerName='None', currentPayerAddress='None')
+
 
 # The User page is accessible to authenticated users (users that have logged in)
 @app.route('/payer', methods=['GET'])
