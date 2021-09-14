@@ -8,7 +8,7 @@ from typing import List, TypedDict
 
 from sqlalchemy.ext.mypy.names import COLUMN
 
-from .MedActionPotential import MedicationActionPotential
+from MedActionPotential import MedicationActionPotential
 from datetime import date, datetime
 import string
 
@@ -246,7 +246,8 @@ class Patient(Base):
     ethnicity = Column(String(64), nullable=False, index=True)
     religion = Column(String(32), nullable=False, index=True)
     marital_status = Column(String(64), nullable=False, index=True)
-    insurance = Column(Integer, nullable=False, index=True)
+    insurance = Column(MEDIUMINT, nullable=False, index=True)
+    payer_id = Column(String(64), nullable=False, index=True)
     DOB = Column(Date, nullable=False, index=True)
     DOD = Column(Date)
     DOD_HOSP = Column(Date)
@@ -289,7 +290,7 @@ class PatientCoverage(Base):
     fhir_json = Column(VARCHAR(2048))
 
     coveragePlanData = relationship('CoveragePlanData')
-    patient = relationship('Patient')
+    # patient = relationship('Patient')
     payer = relationship('Payer')
 
     def __str__(self):
@@ -683,5 +684,3 @@ class CoveragePlanData(Base):
     type = Column(String(256), nullable=False)
     value = Column(String(256), nullable=False)
     name = Column(VARCHAR(256))
-
-    coverage = relationship('PatientCoverage')

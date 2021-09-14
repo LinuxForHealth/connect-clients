@@ -1,8 +1,8 @@
-from .databaseUtil import DatabaseUtil
-from .database_classes import Patient, Payer
+from databaseUtil import DatabaseUtil
+from ../client_tutorial.database_classe import Patient, Payer
 from sqlalchemy import select
 from typing import List
-from .InsuranceDao import InsuranceDao, InsuranceCompanyDict
+from InsuranceDao import InsuranceDao, InsuranceCompanyDict
 import string
 
 class PatientsDao:
@@ -67,8 +67,12 @@ class PatientsDao:
         self.session.commit()
         return patient
 
-    def getPatientForPayer(self, payer_id:int)->List[Patient]:
+    def getPatientForPayer(self, payerId:int)->List[Patient]:
         global session
-        global globalPatient
-        global globalMilitaryInfo
-        return self.session.query(Patient).filter(Patient.insurance == payer_id).all()
+        print("searching PAYER ID: " + str(payerId))
+        return self.session.query(Patient).filter(Patient.payer_id == payerId).all()
+
+
+    def getPatientByLastName(self, lastName:str)->List[Patient]:
+        global session
+        return self.session.query(Patient).filter(Patient.last_name == lastName).all()

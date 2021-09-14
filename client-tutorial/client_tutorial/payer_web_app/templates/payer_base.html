@@ -2,23 +2,6 @@
 
 {% block content %}
 
-<script>
-$('#payerselect').on('change', function()
-{
-    value= this.value;
-    alert(value)
-    console.log(value)
-  });
-
-function getPayerFormData(form) {
-    // creates a FormData object and adds chips text
-    var formData = new FormData(document.getElementById(form));
-    console.log(formData)
-    return formData
-};
-
-
-</script>
 <!--
   ~ Copyright (c) 2021 IBM Corporation
   ~ Henry Feldman, MD (CMO Development, IBM Watson Health)
@@ -37,35 +20,28 @@ function getPayerFormData(form) {
         </ol>
     </nav>
     {{ endpoint }}
-    <div class="row">
-        <form action="/payer" id="payer-form" method="POST" enctype="text/plain">
+   <div class="row">
+        <form action="/requests" id="payer-form" method="get">
             <legend>Select payer to view</legend>
             <div class="form-floating">
                 <div class="row">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon3">Payer Name</span>
-                        <select class="form-select" aria-label="Select Payer to view" id="payerselect"
-                                name="payerselect">
+                        <select class="form-select" aria-label="Select Payer to become" id="payerselect" name="payerselect">
                             <option selected value="">Use this to select the payer to view</option>
                             {% for payer in payerNames %}
-                            <option value="{{ payer }}">{{ payer }}</option>
+                                <option value="{{ payer }}">{{ payer }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
-    {% if currentPayerName != 'None' %}
-        <div class="accordion" id="accordionExample">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">NAME: {{ currentPayerName }}</h2>
-                <div class="accordion-body">
-                    <strong>Address:</strong>{{ currentPayerAddress }}
-                  </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <button type="submit" class="btn btn-primary float-end" id="payer-form-button">Submit</button>
+                </form>
             </div>
-        </div>
-    {% endif %}
 </div>
-
+</div>
+</div>
 {% endblock %}

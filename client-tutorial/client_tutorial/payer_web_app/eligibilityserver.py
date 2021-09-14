@@ -15,7 +15,10 @@ from ..PatientsDao import PatientsDao
 from typing import TypedDict, List
 import uuid
 import secrets
+import logging
 
+
+logging.basicConfig(filename='flask_app.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 csrf_protect = CSRFProtect()
 
@@ -53,22 +56,19 @@ app.jinja_env.globals['bootstrap_is_hidden_field'] = is_hidden_field_filter
 
 
 
-@app.route('/payer', methods=['GET', 'POST'])
-@click.argument("payer")
+@app.route('/requests', methods=['GET'])
+@click.argument("requests")
 def selectPayer():
     global payerDict
-    if request.method == 'POST':
-        payerName = request.form["payerselect"]
+    if request.method == 'GET':
+        payerName = request.args.get("payerselect")
+        app.logger.debug(payerName)
+        print("PAYER NAME: "+ payerName)
         payer = payerNameDict[payerName]
-        memberList = patientDao.getPatientForPayer(payer.id)
+        memberList:List[Patient] = patientDao.getPatientForPayer(payer.id)
         payerAddress:str = payer.street+'<br>'+payer.city+", "+payer.state+" "+payer.zip
         return render_template('view_requests.html',
-                               payer=payer, memberList=memberList, endpoint=url_for('/payer'), currentPayerName=payer.Name, currentPayerAddress=payerAddress)
-    elif request.method == 'GET':
-        payerNames = []
-        for payer in payerDict.values():
-            payerNames.append(payer.Name)
-        return render_template('payer_base.html', payerNames=payerNames, currentPayerName='None', currentPayerAddress='None')
+                               payer=payer, memberList=memberList, memberCount=len(memberList), currentPayerName=payer.Name, currentPayerAddress=payerAddress)
 
 
 # The User page is accessible to authenticated users (users that have logged in)

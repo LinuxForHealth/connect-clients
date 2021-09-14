@@ -6,10 +6,12 @@ from sqlalchemy import create_engine
 from sqlalchemy import select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from .config import get_settings
+from config import get_settings
 
 session=None
 engine=None
+
+
 
 class DatabaseUtil():
     """
@@ -33,6 +35,7 @@ class DatabaseUtil():
 
         settings = get_settings()
         logging.basicConfig()
+        print('DATABASEUTIL FROM CONFIG: ' + settings.tutorial_mysql_url)
         # turn this off in production as it will drive us crazy
         #logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
         engine = create_engine(settings.tutorial_mysql_url)
