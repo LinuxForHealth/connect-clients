@@ -1,7 +1,7 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy import app
-from .PatientsDao import PatientsDao
+from PatientsDao import PatientsDao
 from .database_classes import Patient, Noteevent, Admission, DRGCode, DIcdDiagnoses, DiagnosisIcd
 from .MedicationDao import MedicationDao
 from .NoteEventDao import NoteEventDao

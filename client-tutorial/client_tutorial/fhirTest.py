@@ -2,13 +2,13 @@
 #  Henry Feldman, MD (CMO Development, IBM Watson Health)
 
 from typing import List
-from .FhirUtil import FhirConverters
-from .database_classes import Patient, Noteevent, LabEvent, DLabItem, Caregiver, Hospital, EKGReport, RadiologyReport
-from .PatientsDao import PatientsDao
-from .NoteEventDao import NoteEventDao
-from .ReportsDao import ReportsDao
-from .ADTDao import AdtDao
-from .LabDao import LabDao, DLabItemDict
+from FhirUtil import FhirConverters
+from database_classes import Patient, Noteevent, LabEvent, DLabItem, Caregiver, Hospital, EKGReport, RadiologyReport
+from PatientsDao import PatientsDao
+from NoteEventDao import NoteEventDao
+from ReportsDao import ReportsDao
+from ADTDao import AdtDao
+from LabDao import LabDao, DLabItemDict
 from fhir.resources.domainresource import DomainResource
 from fhir.resources.organization import Organization
 from fhir.resources.patient import Patient
