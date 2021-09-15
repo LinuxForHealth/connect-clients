@@ -1,5 +1,5 @@
 from databaseUtil import DatabaseUtil
-from ../client_tutorial.database_classe import Patient, Payer
+from database_classes import Patient, Payer
 from sqlalchemy import select
 from typing import List
 from InsuranceDao import InsuranceDao, InsuranceCompanyDict
