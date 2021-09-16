@@ -1,0 +1,47 @@
+{% extends "dark_layout.html" %}
+
+{% block content %}
+
+<!--
+  ~ Copyright (c) 2021 IBM Corporation
+  ~ Henry Feldman, MD (CMO Development, IBM Watson Health)
+  -->
+
+<!-- Breadcrumb-->
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Home</li>
+            <li class="breadcrumb-item">
+                <a href="#">Payer</a>
+            </li>
+            <li class="breadcrumb-item active">Selection</li>
+            <!-- Breadcrumb Menu-->
+        </ol>
+    </nav>
+    {{ endpoint }}
+   <div class="row">
+        <form action="/requests" id="payer-form" method="get">
+            <legend>Select payer to view</legend>
+            <div class="form-floating">
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon3">Payer Name</span>
+                        <select class="form-select" aria-label="Select Payer to become" id="payerselect" name="payerselect">
+                            <option selected value="">Use this to select the payer to view</option>
+                            {% for payer in payerNames %}
+                                <option value="{{ payer }}">{{ payer }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <button type="submit" class="btn btn-primary float-end" id="payer-form-button">Submit</button>
+                </form>
+            </div>
+</div>
+</div>
+</div>
+{% endblock %}
