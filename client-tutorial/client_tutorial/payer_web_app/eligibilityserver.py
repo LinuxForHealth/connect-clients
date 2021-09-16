@@ -65,10 +65,19 @@ def selectPayer():
         app.logger.debug(payerName)
         print("PAYER NAME: "+ payerName)
         payer = payerNameDict[payerName]
-        memberList:List[Patient] = patientDao.getPatientForPayer(payer.id)
+        # make a dict by patient ID for every patient so we can map patients to coverage
+        patientDict = {}
+        for patient in patientDao.getPatientForPayer(payer.id):
+            patientDict[patient.ROW_ID] = patient
+
+        #now make a list of patient coverage and patient tuples
+        patientCoverageTupleList = []
+        for coverage in insuranceDao.getAllPatientCoverageForPayerId(payer.id):
+            patientCoverageTupleList.append((patientDict[coverage.patient_id],coverage))
+
         payerAddress:str = payer.street+'<br>'+payer.city+", "+payer.state+" "+payer.zip
         return render_template('view_requests.html',
-                               payer=payer, memberList=memberList, memberCount=len(memberList), currentPayerName=payer.Name, currentPayerAddress=payerAddress)
+                               payer=payer, patientCoverageTupleList = patientCoverageTupleList, currentPayerName=payer.Name, currentPayerAddress=payerAddress)
 
 
 # The User page is accessible to authenticated users (users that have logged in)

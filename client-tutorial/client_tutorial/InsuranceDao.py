@@ -96,3 +96,22 @@ class InsuranceDao:
         self.session.add(patientCoverage)
         self.session.commit()
         return patientCoverage
+
+    def getAllCoveragePlanData(self)->List[CoveragePlanData]:
+        """
+        gets all the coverage plan data to assemble the coverage details for a given patientcoverage
+        @return: coverage plan data records
+        @rtype: List[CoveragePlanData]
+        """
+        global session
+        return self.session.query(CoveragePlanData).all()
+
+
+    def getAllPatientCoverageForPayerId(self, payerId:int)->List[PatientCoverage]:
+        """
+        gets all the coverage plan data to assemble the coverage details for a given patientcoverage
+        @return: coverage plan data records
+        @rtype: List[CoveragePlanData]
+        """
+        global session
+        return self.session.query(PatientCoverage).filter(PatientCoverage.payer_id == payerId).all()

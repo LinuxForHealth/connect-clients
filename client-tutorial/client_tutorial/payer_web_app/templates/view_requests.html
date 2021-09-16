@@ -28,15 +28,19 @@
     <th scope=""col">Member Id</th>
     <th scope=""col">Member First</th>
     <th scope=""col">Member Last</th>
-    <th scope=""col">Request</th>
+    <th scope=""col">Plan/Coverage</th>
+    <th scope=""col">Coverage Detail</th>
     </thead>
     <tbody>
-    {% for patient in memberList %}
+    {% for tuple in patientCoverageTupleList %}
     <tr class="table-active">
-      <th scope="row">{{ patient.SUBJECT_ID }}</th>
-      <td>{{ patient.first_name }}</td>
-      <td>{{ patient.last_name }}</td>
-      <td>{{ patient.insurance }}</td>
+      <th scope="row">{{ tuple.1.member_id }}</th>
+      <td>{{ tuple.0.first_name }}</td>
+      <td>{{ tuple.0.last_name }}</td>
+      <td>{{ tuple.1.payer_plan_id }}</td>
+      <td>
+        <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" title="Coverage Detail" data-bs-content="And here's some amazing content. It's very engaging. Right?" data-bs-placement="left">Click to toggle popover</button></td>
+
     </tr>
     {% endfor %}
     </tbody>

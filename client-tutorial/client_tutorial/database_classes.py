@@ -289,9 +289,9 @@ class PatientCoverage(Base):
     member_id = Column(MEDIUMINT, nullable=False)
     fhir_json = Column(VARCHAR(2048))
 
-    coveragePlanData = relationship('CoveragePlanData')
+    coveragePlanData = relationship('CoveragePlanData', lazy='joined')
     # patient = relationship('Patient')
-    payer = relationship('Payer')
+    payer = relationship('Payer', lazy='joined')
 
     def __str__(self):
         elements = []
