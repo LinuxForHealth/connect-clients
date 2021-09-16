@@ -1,5 +1,5 @@
-from .database_classes import Payer
-from .databaseUtil import DatabaseUtil
+from database_classes import Payer
+from databaseUtil import DatabaseUtil
 import random
 import csv
 
