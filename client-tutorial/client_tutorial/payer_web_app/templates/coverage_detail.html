@@ -1,0 +1,51 @@
+{% extends "dark_layout.html" %}
+
+{% block content %}<!--
+  ~ Copyright (c) 2021 IBM Corporation
+  ~ Henry Feldman, MD (CMO Development, IBM Watson Health)
+  -->
+
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Home</li>
+            <li class="breadcrumb-item">
+                <a href="/payer&payerId={ payerId }}">Payer</a>
+            </li>
+            <li class="breadcrumb-item active"> <a href="/requests?payerselect={{ payer['Name'] }}">Coverage</a></li>
+            <li class="breadcrumb-item active">Details</li>
+            <!-- Breadcrumb Menu-->
+        </ol>
+    </nav>
+    <div class="row">
+        <h2>Coverage Details for patient:</h2>
+        <h3>Selected Payer: {{ payer['Name'] }}</h3>
+        <table class="table table-borderless">
+            <tr>
+                <td><strong>Patient:</strong></td>
+                <td>{{ patient['last_name'] }}, {{ patient['first_name'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Plan ID:</strong></td>
+                <td>{{ coverage['payer_plan_id'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Member ID:</strong></td>
+                <td>{{ coverage['member_id'] }}</td>
+            </tr>
+            {% for coverageOption in coverage['coveragePlanData'] %}
+            <tr>
+                <td><strong>{{ coverageOption['type'] }}</strong></td>
+                <td>{{ coverageOption['value'] }}
+                {% if coverageOption['name'] %}
+                    : {{ coverageOption['name'] }}
+                {% else %}
+                    &nbsp;
+                {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

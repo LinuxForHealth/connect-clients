@@ -76,3 +76,7 @@ class PatientsDao:
     def getPatientByLastName(self, lastName:str)->List[Patient]:
         global session
         return self.session.query(Patient).filter(Patient.last_name == lastName).all()
+
+    def getPatientByRowId(self, rowId: int):
+        global session
+        return self.session.query(Patient).get(rowId)

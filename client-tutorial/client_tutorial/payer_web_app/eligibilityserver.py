@@ -3,14 +3,14 @@
 from datetime import datetime
 import os
 
-from flask import Flask, session, request, url_for, flash, send_from_directory, jsonify, render_template_string, render_template
+from flask import Flask, redirect, session, request, url_for, flash, send_from_directory, jsonify, render_template_string, render_template
 from flask_sqlalchemy import SQLAlchemy
 import click
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from ..InsuranceDao import InsuranceDao
 from typing import List
-from ..database_classes import Patient, Payer
+from ..database_classes import Patient, Payer, PatientCoverage
 from ..PatientsDao import PatientsDao
 from typing import TypedDict, List
 import uuid
@@ -89,9 +89,19 @@ def payer_list():
         payerNames.append(payer.Name)
     return render_template('payer_base.html', payerNames = payerNames)
 
+@app.route('/coveragedetail', methods=['GET'])
+def coverageDetail():
+    global payerDict
+    coverageId:int = request.args.get("coverageId")
+    coverage: PatientCoverage = insuranceDao.getPatientCoverage(coverageId)
+    patient = patientDao.getPatientByRowId(coverage.patient_id)
+    payer = coverage.payer
+    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer)
+
+
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def default():
+    return redirect('/payer')
 
 @app.route('/patients')
 def hello():
