@@ -1,5 +1,5 @@
-from .databaseUtil import DatabaseUtil
-from .database_classes import Noteevent, RadiologyReport
+from databaseUtil import DatabaseUtil
+from database_classes import Noteevent, RadiologyReport
 from typing import List, Dict
 
 class NoteEventDao:

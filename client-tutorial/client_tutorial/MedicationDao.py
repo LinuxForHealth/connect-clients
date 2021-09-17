@@ -1,5 +1,5 @@
-from .databaseUtil import DatabaseUtil
-from .database_classes import Prescription
+from databaseUtil import DatabaseUtil
+from database_classes import Prescription
 from sqlalchemy import select
 from typing import List
 

@@ -1,6 +1,6 @@
-from .ADTDao import AdtDao
-from .PatientsDao import PatientsDao
-from .database_classes import Patient
+from ADTDao import AdtDao
+from PatientsDao import PatientsDao
+from database_classes import Patient
 
 class billing():
 
