@@ -99,6 +99,7 @@ def coverageDetail():
     memberEligibilityRequestDict = {}
     eligibilityRequests = insuranceDao.getAllActiveEligibitilityRequestsForPayer(coverage.payer_id)
     memberEligibilityRequestDict = {}
+    benefitMatchIds = []
     #now figure out if our extra search match the other benefits in the coverage of the patient. Obviously the member_id has to match or there is no point checking.
     for eligibilityRequest in eligibilityRequests:
         memberEligibilityRequestDict[eligibilityRequest.member_id]=eligibilityRequest
@@ -107,16 +108,72 @@ def coverageDetail():
         benefit_3:str = None
         match_approve:bool = False
         for benefit in coverage.coveragePlanData:
-            if (eligibilityRequest.coverage_option_1 and benefit.name and eligibilityRequest.coverage_option_1 in benefit.name) or ( benefit.value and eligibilityRequest.coverage_option_1 in benefit.value):
-                benefit_1 = benefit.name
-        if ( eligibilityRequest.coverage_option_2 and benefit.name and eligibilityRequest.coverage_option_2 in benefit.name)  or (eligibilityRequest.coverage_option_2 and eligibilityRequest.coverage_option_2 in benefit.value):
-            benefit_2 = benefit.name
-        if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.name) or (eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.value):
-            benefit_3 = benefit.name
+            if (eligibilityRequest.coverage_option_1 and benefit.name and eligibilityRequest.coverage_option_1 in benefit.name):
+                if benefit.name:
+                    benefit_1 = benefit.name + " matched benefit 1"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+            if ( eligibilityRequest.coverage_option_2 and benefit.name and eligibilityRequest.coverage_option_2 in benefit.name):
+                if benefit.name:
+                    benefit_2 = benefit.name + " matched benefit 2"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+            if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.name):
+                if benefit.name:
+                    benefit_3 = benefit.name + " matched benefit 3"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           if (eligibilityRequest.coverage_option_1 and benefit.name and eligibilityRequest.coverage_option_1 in benefit.name):
+                if benefit.name:
+                    benefit_1 = benefit.name + " matched benefit 1"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           if ( eligibilityRequest.coverage_option_2 and benefit.name and eligibilityRequest.coverage_option_2 in benefit.name):
+                if benefit.name:
+                    benefit_2 = benefit.name + " matched benefit 2"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.name):
+                if benefit.name:
+                    benefit_3 = benefit.name + " matched benefit 3"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           # repeat for value after doing name
+           if (eligibilityRequest.coverage_option_1 and benefit.vlue and eligibilityRequest.coverage_option_1 in benefit.value):
+                if benefit.value:
+                    benefit_1 = benefit.value + " matched benefit 1"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           if ( eligibilityRequest.coverage_option_2 and benefit.value and eligibilityRequest.coverage_option_2 in benefit.value):
+                if benefit.value:
+                    benefit_2 = benefit.name + " matched benefit 2"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.value):
+                if benefit.value:
+                    benefit_3 = benefit.value + " matched benefit 3"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           if (eligibilityRequest.coverage_option_1 and benefit.value and eligibilityRequest.coverage_option_1 in benefit.value):
+                if benefit.value:
+                    benefit_1 = benefit.value + " matched benefit 1"
+                 if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           if ( eligibilityRequest.coverage_option_2 and benefit.value and eligibilityRequest.coverage_option_2 in benefit.value):
+                if benefit.name:
+                    benefit_2 = benefit.value + " matched benefit 2"
+                 if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
+           if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.value):
+                if benefit.value:
+                    benefit_3 = benefit.value + " matched benefit 3"
+                if benefit.id not in benefitMatchIds:
+                    benefitMatchIds.append(benefit.id)
 
-        if (eligibilityRequest.coverage_option_1 and benefit_1) and (eligibilityRequest.coverage_option_2 and benefit_2 and eligibilityRequest.coverage_option_3 and benefit_3):
+
+        if (eligibilityRequest.coverage_option_1 and benefit_1) or (eligibilityRequest.coverage_option_2 and benefit_2) or (eligibilityRequest.coverage_option_3 and benefit_3):
             match_approve = True
-    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, eligibilityRequest=eligibilityRequest, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve)
+    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, eligibilityRequest=eligibilityRequest, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds)
 
 
 @app.route("/")
