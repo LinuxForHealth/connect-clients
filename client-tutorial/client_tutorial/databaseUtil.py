@@ -41,6 +41,7 @@ class DatabaseUtil():
         # note I added the pool_pre_ping to prevent flask from timing out server connections via a stale pool state.
         # the ping is the "pessimistic" view from SqlAlchemy that assumes that it will always happen so this ping happens
         # as overhead on every querry. For more info: https://docs.sqlalchemy.org/en/13/core/pooling.html#pool-disconnects
+        # fixed in project in commit 90978fd
         engine = create_engine(settings.tutorial_mysql_url, pool_pre_ping=True)
 
 
