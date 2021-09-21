@@ -290,8 +290,65 @@ class PatientCoverage(Base):
     fhir_json = Column(VARCHAR(2048))
 
     coveragePlanData = relationship('CoveragePlanData', lazy='joined')
+    patient = relationship('Patient')
+    payer = relationship('Payer', lazy='joined')
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
+class EligibilityRequest(Base):
+    __tablename__ = 'eligibility_request'
+    """
+    this is a record for a payer account for the patient (links to payer, patient and account info)
+    """
+    id = Column(MEDIUMINT, primary_key=True)
+    patient_id = Column(ForeignKey('PATIENTS.ROW_ID', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
+    payer_id = Column(ForeignKey('payer.id', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
+    payer_plan_id = Column(Integer, nullable=False)
+    member_id = Column(MEDIUMINT, nullable=False)
+    fhir_json = Column(VARCHAR(2048))
+    coverage_option_1 = Column(VARCHAR(256))
+    coverage_option_2 = Column(VARCHAR(256))
+    coverage_option_3 = Column(VARCHAR(256))
+    processed = Column(TINYINT, index=True)
+
     # patient = relationship('Patient')
     payer = relationship('Payer', lazy='joined')
+    patient = relationship('Patient', lazy='joined')
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)
+
+class EligibilityRequestResponse(Base):
+    __tablename__ = 'eligibility_request_response'
+
+    id = Column(Integer, primary_key=True)
+    patient_id = Column(ForeignKey('PATIENTS.ROW_ID', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
+    payer_id = Column(ForeignKey('payer.id', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
+    eligibility_request_id = Column(ForeignKey('eligibility_request.id', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
+    value = Column(TINYINT(1), nullable=False, index=True)
+    fhir_json = Column(String(2048), nullable=False)
+
+    #FK links
+    eligibility_request = relationship('EligibilityRequest')
+    # patient = relationship('PATIENT')
+    payer = relationship('Payer')
 
     def __str__(self):
         elements = []

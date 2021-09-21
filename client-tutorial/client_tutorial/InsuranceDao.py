@@ -1,5 +1,5 @@
 from databaseUtil import DatabaseUtil
-from database_classes import Payer, PatientCoverage, CoveragePlanData
+from database_classes import Payer, PatientCoverage, CoveragePlanData, EligibilityRequest, EligibilityRequestResponse
 from typing import TypedDict, List
 
 
@@ -115,3 +115,38 @@ class InsuranceDao:
         """
         global session
         return self.session.query(PatientCoverage).filter(PatientCoverage.payer_id == payerId).all()
+
+    def getAllEligibitilityRequestsForPayer(self, payerId:int)->List[EligibilityRequest]:
+        """
+        gets all the eligibility requests for a specigic payer
+        @param payerId:
+        @type payerId:
+        @return: eligibilityRequestList
+        @rtype: List[EligibilityRequest]
+        """
+        global session
+        return self.session.query(EligibilityRequest).filter(EligibilityRequest.payer_id == payerId).all()
+
+    def getAllActiveEligibitilityRequestsForPayer(self, payerId:int)->List[EligibilityRequest]:
+        """
+        gets all the eligibility requests for a specigic payer
+        @param payerId:
+        @type payerId:
+        @return: eligibilityRequestList
+        @rtype: List[EligibilityRequest]
+        """
+        global session
+        return self.session.query(EligibilityRequest).filter(EligibilityRequest.payer_id == payerId and EligibilityRequest.processed != 0).all()
+
+    def saveEligibilityRequest(self, eligibilityRequest:EligibilityRequest)->EligibilityRequest:
+        """
+        gets all the eligibility requests for a specigic payer
+        @param eligibilityRequest:
+        @type eligibilityRequest:
+        @return:
+        @rtype:
+        """
+        global session
+        self.session.add(eligibilityRequest)
+        self.session.commit()
+        return eligibilityRequest

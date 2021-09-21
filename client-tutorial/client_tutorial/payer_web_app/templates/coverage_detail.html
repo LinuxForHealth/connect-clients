@@ -1,6 +1,7 @@
 {% extends "dark_layout.html" %}
 
-{% block content %}<!--
+{% block content %}
+<!--
   ~ Copyright (c) 2021 IBM Corporation
   ~ Henry Feldman, MD (CMO Development, IBM Watson Health)
   -->
@@ -21,31 +22,85 @@
         <h2>Coverage Details for patient:</h2>
         <h3>Selected Payer: {{ payer['Name'] }}</h3>
         <table class="table table-borderless">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                   <th>Request Match</th>
+               </tr>
             <tr>
                 <td><strong>Patient:</strong></td>
-                <td>{{ patient['last_name'] }}, {{ patient['first_name'] }}</td>
-            </tr>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                   <th><td><i class="bi bi-check"></th>
+          </tr>
             <tr>
                 <td><strong>Plan ID:</strong></td>
                 <td>{{ coverage['payer_plan_id'] }}</td>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                   <th><td><i class="bi bi-check"></th>
             </tr>
             <tr>
                 <td><strong>Member ID:</strong></td>
                 <td>{{ coverage['member_id'] }}</td>
+                     <th><td><i class="bi bi-check"></th>
             </tr>
             {% for coverageOption in coverage['coveragePlanData'] %}
             <tr>
                 <td><strong>{{ coverageOption['type'] }}</strong></td>
-                <td>{{ coverageOption['value'] }}
-                {% if coverageOption['name'] %}
-                    : {{ coverageOption['name'] }}
-                {% else %}
-                    &nbsp;
+                <td>{{ coverageOption['value'] }}</td>
+                    {% if coverageOption['name'] %}
+                        <td> {{ coverageOption['name'] }} </td>
+                        {% if (benefit_1 and coverageOption['name'] and benefit_1 == coverageOption['name']) or (benefit_2 and benefit_2 == coverageOption['name']) or (benefit_3 and benefit_3 == coverageOption['name']) %}:
+                            <td><i class="bi bi-person-check-fill"></i></td>
+                    {% else %}
+                            <td><i class="bi bi-x-square"></i></td>
+                    {% endif %}
                 {% endif %}
-                </td>
+                    <td> &nbsp; </td>
+                    <td> &nbsp; </td>
             </tr>
             {% endfor %}
+
+            {% if eligibilityRequest.coverage_option_1 or eligibilityRequest.coverage_option_2 or eligibilityRequest.coverage_option_3 %}
+                <h4>Additional Benefit Searches</h4>
+            <ul class="list-group list-group-flush">
+                {% if eligibilityRequest.coverage_option_1 and benefit_1 == None %}
+                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_1 }}</li>
+                {% else %}
+                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_1 }} <i class="bi bi-person-check-fill"></i></li>
+                {%endif %}
+                {% if eligibilityRequest.coverage_option_2 and benefit_2 == None %}
+                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_2 }}</li>
+                {% else %}
+                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_2 }} <i class="bi bi-person-check-fill"></i></li>
+                {%endif %}
+                {% if eligibilityRequest.coverage_option_3 and benefit_3 == None %}
+                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_3 }}</li>
+                {% else %}
+                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_3 }} <i class="bi bi-person-check-fill"></i></li>
+                {%endif %}
+            </ul>
         </table>
+        <form action="/requests" id="request-approval-form" method="put">
+            <h3>Approve Eligibility Request</h3>
+            <div class=""row">
+            {% if match_approve %}
+            <input class="form-check-input" type="checkbox" id="approved"  checked>
+            <label class="form-check-label" for="approved">Approve Request based on automatch</label>
+            {% else %}
+            <input class="form-check-input" type="checkbox" id="approved">
+                        <label class="form-check-label" for="approved">Reject request based on failed automatch</label>
+            {% endif %}
+            </div>
+            <button type="button" class="btn btn-secondary" onClick=onClick="window.location.href='/requests?payerselect='{{coverage.payer.name }}';">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+
+        </form>
+
     </div>
 </div>
+
 {% endblock %}

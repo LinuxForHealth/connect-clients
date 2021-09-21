@@ -96,7 +96,27 @@ def coverageDetail():
     coverage: PatientCoverage = insuranceDao.getPatientCoverage(coverageId)
     patient = patientDao.getPatientByRowId(coverage.patient_id)
     payer = coverage.payer
-    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer)
+    memberEligibilityRequestDict = {}
+    eligibilityRequests = insuranceDao.getAllActiveEligibitilityRequestsForPayer(coverage.payer_id)
+    memberEligibilityRequestDict = {}
+    #now figure out if our extra search match the other benefits in the coverage of the patient. Obviously the member_id has to match or there is no point checking.
+    for eligibilityRequest in eligibilityRequests:
+        memberEligibilityRequestDict[eligibilityRequest.member_id]=eligibilityRequest
+        benefit_1:str = None
+        benefit_2:str = None
+        benefit_3:str = None
+        match_approve:bool = False
+        for benefit in coverage.coveragePlanData:
+            if (eligibilityRequest.coverage_option_1 and benefit.name and eligibilityRequest.coverage_option_1 in benefit.name) or ( benefit.value and eligibilityRequest.coverage_option_1 in benefit.value):
+                benefit_1 = benefit.name
+        if ( eligibilityRequest.coverage_option_2 and benefit.name and eligibilityRequest.coverage_option_2 in benefit.name)  or (eligibilityRequest.coverage_option_2 and eligibilityRequest.coverage_option_2 in benefit.value):
+            benefit_2 = benefit.name
+        if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.name) or (eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.value):
+            benefit_3 = benefit.name
+
+        if (eligibilityRequest.coverage_option_1 and benefit_1) and (eligibilityRequest.coverage_option_2 and benefit_2 and eligibilityRequest.coverage_option_3 and benefit_3):
+            match_approve = True
+    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, eligibilityRequest=eligibilityRequest, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve)
 
 
 @app.route("/")
