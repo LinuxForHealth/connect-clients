@@ -30,73 +30,96 @@
                </tr>
             <tr>
                 <td><strong>Patient:</strong></td>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                   <th><td><i class="bi bi-check"></th>
-          </tr>
+                    <th>{{ patient.last_name }}, {{patient.first_name }}</th>
+                    <td>&nbsp;</td>
+                   <td>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+                        </svg></td>
+            </tr>
             <tr>
                 <td><strong>Plan ID:</strong></td>
                 <td>{{ coverage['payer_plan_id'] }}</td>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                   <th><td><i class="bi bi-check"></th>
-            </tr>
+                    <td>&nbsp;</td>
+                <td>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+                    </svg></td>            </tr>
             <tr>
                 <td><strong>Member ID:</strong></td>
                 <td>{{ coverage['member_id'] }}</td>
-                     <th><td><i class="bi bi-check"></th>
-            </tr>
+                <td>&nbsp;</td>
+                <td>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+                    </svg></td>             </tr>
             {% for coverageOption in coverage['coveragePlanData'] %}
             <tr>
                 <td><strong>{{ coverageOption['type'] }}</strong></td>
                 <td>{{ coverageOption['value'] }}</td>
                     {% if coverageOption['name'] %}
                         <td> {{ coverageOption['name'] }} </td>
-                        {% if (benefit_1 and coverageOption['name'] and benefit_1 == coverageOption['name']) or (benefit_2 and benefit_2 == coverageOption['name']) or (benefit_3 and benefit_3 == coverageOption['name']) %}:
-                            <td><i class="bi bi-person-check-fill"></i></td>
-                    {% else %}
-                            <td><i class="bi bi-x-square"></i></td>
+                        {% if coverageOption['id'] in benefitMatchIds %}
+                            <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
+                                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+
+</svg>                         </td>
+                        {% else %}
+                            <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                            </svg></td>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-                    <td> &nbsp; </td>
-                    <td> &nbsp; </td>
             </tr>
             {% endfor %}
 
             {% if eligibilityRequest.coverage_option_1 or eligibilityRequest.coverage_option_2 or eligibilityRequest.coverage_option_3 %}
                 <h4>Additional Benefit Searches</h4>
             <ul class="list-group list-group-flush">
-                {% if eligibilityRequest.coverage_option_1 and benefit_1 == None %}
-                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_1 }}</li>
-                {% else %}
-                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_1 }} <i class="bi bi-person-check-fill"></i></li>
+                {% if eligibilityRequest.coverage_option_1 and benefit_1 != None %}
+                    <li class="list-group-item list-group-item-secondary">{{ eligibilityRequest.coverage_option_1 }}</li>
+                {% elif benefit_1 != None  %}
+                    <li class="list-group-item  list-group-item-success">{{ eligibilityRequest.coverage_option_1 }} <i class="bi bi-person-check-fill"></i></li>
                 {%endif %}
-                {% if eligibilityRequest.coverage_option_2 and benefit_2 == None %}
-                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_2 }}</li>
-                {% else %}
-                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_2 }} <i class="bi bi-person-check-fill"></i></li>
+                {% if eligibilityRequest.coverage_option_2 and benefit_2 != None %}
+                    <li class="list-group-item list-group-item-secondary">{{ eligibilityRequest.coverage_option_2 }}</li>
+                {% elif benefit_2 != None %}
+                    <li class="list-group-item  list-group-item-success">{{ eligibilityRequest.coverage_option_2 }} <i class="bi bi-person-check-fill"></i></li>
                 {%endif %}
-                {% if eligibilityRequest.coverage_option_3 and benefit_3 == None %}
-                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_3 }}</li>
-                {% else %}
-                    <li class="list-group-item">{{ eligibilityRequest.coverage_option_3 }} <i class="bi bi-person-check-fill"></i></li>
+                {% if eligibilityRequest.coverage_option_3 and benefit_3 != None %}
+                    <li class="list-group-item list-group-item-secondary">{{ eligibilityRequest.coverage_option_3 }}</li>
+                {% elif benefit_3 != None %}
+                    <li class="list-group-item  list-group-item-success">{{ eligibilityRequest.coverage_option_3 }} <i class="bi bi-person-check-fill"></i></li>
                 {%endif %}
             </ul>
+            {% endif %}
         </table>
+        1: {{ benefit_1 }}
+        2: {{ benefit_2 }}
+        3: {{ benefit_3 }}
+
         <form action="/requests" id="request-approval-form" method="put">
             <h3>Approve Eligibility Request</h3>
-            <div class=""row">
+            <div class="row">
             {% if match_approve %}
-            <input class="form-check-input" type="checkbox" id="approved"  checked>
-            <label class="form-check-label" for="approved">Approve Request based on automatch</label>
+            <div class="input-group mb-3">
+            <span class="input-group-text" id="approve-label">Recommended Action:</span>
+            <input class="form-check-input" type="checkbox" id="approved-check"  checked>
+            <label class="form-check-label" for="approved-check">&nbsp;Approve Request based on automatch</label>
+            </div>
             {% else %}
-            <input class="form-check-input" type="checkbox" id="approved">
-                        <label class="form-check-label" for="approved">Reject request based on failed automatch</label>
+            <div class="input-group mb-3">
+            <span class="input-group-text" id="approve-label">Recommended Action:</span>
+            <input class="form-check-input" type="checkbox" id="approved-check">
+            <label class="form-check-label" for="approved-check">&nbsp;Reject request based on failed automatch</label>
+            </div>
             {% endif %}
             </div>
+           <div class=""row">
             <button type="button" class="btn btn-secondary" onClick=onClick="window.location.href='/requests?payerselect='{{coverage.payer.name }}';">Cancel</button>
             <button type="submit" class="btn btn-primary">Submit</button>
-
+            </div>
 
         </form>
 

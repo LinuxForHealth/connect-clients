@@ -108,65 +108,65 @@ def coverageDetail():
         benefit_3:str = None
         match_approve:bool = False
         for benefit in coverage.coveragePlanData:
-            if (eligibilityRequest.coverage_option_1 and benefit.name and eligibilityRequest.coverage_option_1 in benefit.name):
-                if benefit.name:
-                    benefit_1 = benefit.name + " matched benefit 1"
+            if eligibilityRequest.coverage_option_1 and benefit.name and eligibilityRequest.coverage_option_1 in benefit.name:
+                benefit_1 = benefit.name + " matched benefit 1"
+                matched = True
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-            if ( eligibilityRequest.coverage_option_2 and benefit.name and eligibilityRequest.coverage_option_2 in benefit.name):
-                if benefit.name:
-                    benefit_2 = benefit.name + " matched benefit 2"
+            if eligibilityRequest.coverage_option_2 and benefit.name and eligibilityRequest.coverage_option_2 in benefit.name:
+                benefit_2 = benefit.name + " matched benefit 2"
+                matched = True
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-            if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.name):
-                if benefit.name:
-                    benefit_3 = benefit.name + " matched benefit 3"
+            if benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.name:
+                matched = True
+                benefit_3 = benefit.name + " matched benefit 3"
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           if (eligibilityRequest.coverage_option_1 and benefit.name and eligibilityRequest.coverage_option_1 in benefit.name):
-                if benefit.name:
-                    benefit_1 = benefit.name + " matched benefit 1"
+            if eligibilityRequest.coverage_option_1 and benefit.name and eligibilityRequest.coverage_option_1 in benefit.name:
+                matched = True
+                benefit_1 = benefit.name + " matched benefit 1"
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           if ( eligibilityRequest.coverage_option_2 and benefit.name and eligibilityRequest.coverage_option_2 in benefit.name):
-                if benefit.name:
-                    benefit_2 = benefit.name + " matched benefit 2"
+            if eligibilityRequest.coverage_option_2 and benefit.name and eligibilityRequest.coverage_option_2 in benefit.name:
+                matched = True
+                benefit_2 = benefit.name + " matched benefit 2"
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.name):
-                if benefit.name:
-                    benefit_3 = benefit.name + " matched benefit 3"
+            if benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.name:
+                matched = True
+                benefit_3 = benefit.name + " matched benefit 3"
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           # repeat for value after doing name
-           if (eligibilityRequest.coverage_option_1 and benefit.vlue and eligibilityRequest.coverage_option_1 in benefit.value):
-                if benefit.value:
-                    benefit_1 = benefit.value + " matched benefit 1"
+                # repeat for value after doing name
+            if eligibilityRequest.coverage_option_1 and benefit.value and eligibilityRequest.coverage_option_1 in benefit.value:
+                matched = True
+                benefit_1 = benefit.value + " matched benefit 1"
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           if ( eligibilityRequest.coverage_option_2 and benefit.value and eligibilityRequest.coverage_option_2 in benefit.value):
-                if benefit.value:
-                    benefit_2 = benefit.name + " matched benefit 2"
+            if eligibilityRequest.coverage_option_2 and benefit.value and eligibilityRequest.coverage_option_2 in benefit.value:
+                matched = True
+                benefit_2 = benefit.name + " matched benefit 2"
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.value):
-                if benefit.value:
-                    benefit_3 = benefit.value + " matched benefit 3"
+            if benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.value:
+                matched = True
+                benefit_3 = benefit.value + " matched benefit 3"
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           if (eligibilityRequest.coverage_option_1 and benefit.value and eligibilityRequest.coverage_option_1 in benefit.value):
-                if benefit.value:
-                    benefit_1 = benefit.value + " matched benefit 1"
-                 if benefit.id not in benefitMatchIds:
+            if eligibilityRequest.coverage_option_1 and benefit.value and eligibilityRequest.coverage_option_1 in benefit.value:
+                matched = True
+                benefit_1 = benefit.value + " matched benefit 1"
+                if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           if ( eligibilityRequest.coverage_option_2 and benefit.value and eligibilityRequest.coverage_option_2 in benefit.value):
-                if benefit.name:
-                    benefit_2 = benefit.value + " matched benefit 2"
-                 if benefit.id not in benefitMatchIds:
+            if eligibilityRequest.coverage_option_2 and benefit.value and eligibilityRequest.coverage_option_2 in benefit.value:
+                matched = True
+                benefit_2 = benefit.value + " matched benefit 2"
+                if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
-           if ( benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.value):
-                if benefit.value:
-                    benefit_3 = benefit.value + " matched benefit 3"
+            if benefit.name and eligibilityRequest.coverage_option_3 and eligibilityRequest.coverage_option_3 in benefit.value:
+                matched = True
+                benefit_3 = benefit.value + " matched benefit 3"
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
 
