@@ -196,22 +196,17 @@ async function subscribe () {
  */
 async function handleMessages (sub) {
     for await (const msg of sub) {
-        var fcn
         let lfh_msg = JSON.parse(new TextDecoder().decode(msg.data))
         let lfh_data_str = Buffer.from(lfh_msg.data, 'base64').toString('utf-8')
-        let { operation, data_format } = lfh_msg
+        let { data_format } = lfh_msg
         if (data_format == 'FHIR-R4_COVERAGEELIGIBILITYREQUEST') {
-            fcn = 'checkEligibility'
-        } else {
-            console.log(`Unsupported data format ${data_format}`)
-        }
-
-        if (fcn) {
             try {
-                await sendTransaction(fcn,  [ lfh_data_str ])
+                await sendTransaction('checkEligibility',  [ lfh_data_str ])
             } catch (error) {
                 console.log(`Error submitting ${fcn} transaction: ${error}`)
             }
+        } else {
+            console.log(`Unsupported data format ${data_format}`)
         }
     }
 }
