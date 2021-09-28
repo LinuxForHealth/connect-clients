@@ -200,13 +200,13 @@ async function handleMessages (sub) {
         let lfh_data_str = Buffer.from(lfh_msg.data, 'base64').toString('utf-8')
         let { data_format } = lfh_msg
         if (data_format == 'FHIR-R4_COVERAGEELIGIBILITYREQUEST') {
+            console.log(`Received ${data_format} message`)
             try {
                 await sendTransaction('checkEligibility',  [ lfh_data_str ])
+                console.log('Sent transaction to the eligibility contract')
             } catch (error) {
                 console.log(`Error submitting ${fcn} transaction: ${error}`)
             }
-        } else {
-            console.log(`Unsupported data format ${data_format}`)
         }
     }
 }
