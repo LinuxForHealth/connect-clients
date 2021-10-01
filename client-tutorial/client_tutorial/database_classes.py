@@ -310,6 +310,12 @@ class EligibilityRequest(Base):
     this is a record for a payer account for the patient (links to payer, patient and account info)
     """
     id = Column(MEDIUMINT, primary_key=True)
+    request_date = Column(Date, index=True, nullable=False)
+    requestor_id = Column(Integer, nullable=False, index=True)
+    requestor_type = Column(VARCHAR(64), nullable=False, index=True)
+    requestor_name = Column(VARCHAR(256), nullable=True, index=False)
+    request_service_type = Column(VARCHAR(64), nullable=False, index=False)
+    request_purpose = Column(VARCHAR(128), nullable=False, index=True) # auth-requirements, benefits, discovery, validation
     patient_id = Column(ForeignKey('PATIENTS.ROW_ID', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
     payer_id = Column(ForeignKey('payer.id', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
     payer_plan_id = Column(Integer, nullable=False)

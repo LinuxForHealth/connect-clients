@@ -17,7 +17,7 @@ from fhir.resources.extension import Extension
 from fhir.resources.attachment import Attachment
 from fhir.resources.humanname import HumanName
 from datetime import date
-from database_classes import Patient, Noteevent, LabEvent, DLabItem, Caregiver, Hospital, EKGReport, RadiologyReport, Payer, PatientCoverage, CoveragePlanData
+from database_classes import Patient, Noteevent, LabEvent, DLabItem, Caregiver, Hospital, EKGReport, RadiologyReport, Payer, PatientCoverage, CoveragePlanData, EligibilityRequest, EligibilityRequestResponse
 import cgi
 import base64
 from httpx import AsyncClient
@@ -613,3 +613,50 @@ class FhirConverters:
         "class": [result.append(data)]
         }
         return Coverage.parse_obj(json_dict)
+
+    def getEligibilityRequestAsFhir(self, eligibilityRequest:EligibilityRequest)->CoverageEligibilityRequest:
+        """
+        returns the json representation of the CoverageEligibilityRequest (check if the patient has this actual coverage) class as the FhirResource CoverageEligibilityRequest
+        @param eligibilityRequest:
+        @type eligibilityRequest:
+        @return: coverageEligibilityRequest
+        @rtype: CoverageEligibilityRequest
+        """
+        json_dict = {
+            "resourceType": "CoverageEligibilityResponse",
+            "id": eligibilityRequest.id,
+            "text": {
+                "status": "generated",
+                "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityResponse.</div>"
+            },
+            "identifier": [
+                {
+                    "system": "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse",
+                    "value": "881234"
+                }
+            ],
+            "status": "active",
+            "purpose": [
+                "validation"
+            ],
+            "patient": {
+                "reference": "Patient/pat1"
+            },
+            "created": "2014-08-16",
+            "request": {
+                "reference": "http://www.BenefitsInc.com/fhir/coverageeligibilityrequest/225476332402"
+            },
+            "outcome": "complete",
+            "disposition": "Policy is currently in-force.",
+            "insurer": {
+                "reference": "Organization/2"
+            },
+            "insurance": [
+                {
+                    "coverage": {
+                        "reference": "Coverage/9876B1"
+                    },
+                    "inforce": true
+                }
+            ]
+        }

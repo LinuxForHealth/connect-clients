@@ -106,6 +106,25 @@ class InsuranceDao:
         global session
         return self.session.query(CoveragePlanData).all()
 
+    def getAllEligibilityRequest(self)->List[EligibilityRequest]:
+        global session
+        return self.session.query(EligibilityRequest).all()
+
+    def getEligibilityRequest(self, id:int)->EligibilityRequest:
+        """
+        gets an eligibility request via its primary key id
+        @param id: the id of the request
+        @type id: int
+        @return: eligibilityRequest
+        @rtype: EligibilityRequest
+        """
+        global session
+        return self.session.query(EligibilityRequest).get(id)
+
+    def getAllEligiilityRequestsForPatientForPayer(self, patientId:int, payerId:int):
+        global session
+        return self.session.query(EligibilityRequest).filter(
+            EligibilityRequest.payer_id == payerId and EligibilityRequest.patient_id == patientId).all()
 
     def getAllPatientCoverageForPayerId(self, payerId:int)->List[PatientCoverage]:
         """
@@ -136,7 +155,7 @@ class InsuranceDao:
         @rtype: List[EligibilityRequest]
         """
         global session
-        return self.session.query(EligibilityRequest).filter(EligibilityRequest.payer_id == payerId and EligibilityRequest.processed != 0).all()
+        return self.session.query(EligibilityRequest).filter(EligibilityRequest.payer_id == payerId and EligibilityRequest.processed == None).all()
 
     def saveEligibilityRequest(self, eligibilityRequest:EligibilityRequest)->EligibilityRequest:
         """

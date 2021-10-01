@@ -2,18 +2,18 @@
 #  Henry Feldman, MD (CMO Development, IBM Watson Health)
 
 
-from PatientsDao import PatientsDao
-from database_classes import Patient
+from InsuranceDao import InsuranceDao
+from database_classes import EligibilityRequest
 from typing import List
+import random
 
-payer_id = 4;
+insuranceDao = InsuranceDao()
+purposes = ['auth-requirements', 'benefits', 'discovery', 'validation']
 
-patientDao = PatientsDao()
-
-listOfPatients:List[Patient] = []
+print('STARTING PURPOSE FIXING')
 #patientList = patientDao.getPatientForPayer(payer_id)
-for patient in patientDao.getPatientForPayer(payer_id):
-    print(patient)
-    listOfPatients.append(patient)
-
-print(len(listOfPatients))
+for eligiblityRequest in insuranceDao.getAllEligibilityRequest():
+    random_index = random.randint(0, len(purposes) - 1)
+    eligiblityRequest.request_purpose = purposes[random_index]
+    insuranceDao.saveEligibilityRequest(eligiblityRequest)
+print('FINISHED')

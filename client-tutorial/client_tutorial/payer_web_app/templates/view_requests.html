@@ -37,9 +37,13 @@
       <th scope="row">{{ tuple.1.member_id }}</th>
       <td>{{ tuple.0.first_name }}</td>
       <td>{{ tuple.0.last_name }}</td>
-      <td>{{ tuple.1.payer_plan_id }}</td>
+            <td>{{ tuple.1.payer_plan_id }} </td>
       <td>
-          <p><a href="/coveragedetail?coverageId={{ tuple.1.id }}" class="pe-auto">View Details</a></p>
+          {% if tuple.1.member_id in requestDict and requestDict[tuple.1.member_id]|count > 1 %}
+            <p><a href="/coveragedetail?coverageId={{ tuple.1.id }}" class="pe-auto">View Details </a> <span class="badge rounded-pill bg-primary">{{ requestDict[tuple.1.member_id]|count -1 }}</span></p>
+          {% else %}
+            <p><a href="/coveragedetail?coverageId={{ tuple.1.id }}" class="text-reset">View Details</a></p>
+          {% endif %}
       </td>
 
     </tr>

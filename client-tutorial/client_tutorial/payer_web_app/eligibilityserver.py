@@ -3,7 +3,7 @@
 from datetime import datetime
 import os
 
-from flask import Flask, redirect, session, request, url_for, flash, send_from_directory, jsonify, render_template_string, render_template
+from flask import Flask, redirect, session, request, abort, url_for, flash, send_from_directory, jsonify, render_template_string, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import click
 from flask_wtf.csrf import CSRFProtect
@@ -16,6 +16,7 @@ from typing import TypedDict, List
 import uuid
 import secrets
 import logging
+from logging.config import dictConfig
 
 
 logging.basicConfig(filename='flask_app.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
@@ -28,6 +29,23 @@ payerDict = insuranceDao.fetchPayerDict()
 payerNameDict = {}
 
 secret_key = secrets.token_urlsafe(16)
+
+#configure logging for the app
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'INFO',
+        'handlers': ['wsgi']
+    }
+})
 
 app = Flask(__name__)
 patientDao: PatientsDao = PatientsDao()
@@ -54,22 +72,30 @@ def is_hidden_field_filter(field):
 
 app.jinja_env.globals['bootstrap_is_hidden_field'] = is_hidden_field_filter
 
-
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(error=str(e)), 404
 
 @app.route('/requests', methods=['GET'])
 @click.argument("requests")
 def selectPayer():
     global payerDict
     if request.method == 'GET':
+        if request.args.get('payerselect') == None:
+            abort(404, description="payerselect cannot be null: "+request.args.get('payerselect'))
         payerName = request.args.get("payerselect")
-        app.logger.debug(payerName)
-        print("PAYER NAME: "+ payerName)
+        app.logger.info('payer name for respond - ' + request.args.get("payerselect"))
         payer = payerNameDict[payerName]
         # make a dict by patient ID for every patient so we can map patients to coverage
         patientDict = {}
         for patient in patientDao.getPatientForPayer(payer.id):
             patientDict[patient.ROW_ID] = patient
-
+        requestDict = {}
+        # make a dict of the pending requests for each member for the payer so we can show next to the member detail link as a badge
+        for eligibilityRequest in insuranceDao.getAllActiveEligibitilityRequestsForPayer(payer.id):
+            if eligibilityRequest.member_id not in requestDict:
+                requestDict[eligibilityRequest.member_id] = []
+            requestDict[eligibilityRequest.member_id].append(eligibilityRequest)
         #now make a list of patient coverage and patient tuples
         patientCoverageTupleList = []
         for coverage in insuranceDao.getAllPatientCoverageForPayerId(payer.id):
@@ -77,7 +103,26 @@ def selectPayer():
 
         payerAddress:str = payer.street+'<br>'+payer.city+", "+payer.state+" "+payer.zip
         return render_template('view_requests.html',
-                               payer=payer, patientCoverageTupleList = patientCoverageTupleList, currentPayerName=payer.Name, currentPayerAddress=payerAddress)
+                               payer=payer, patientCoverageTupleList = patientCoverageTupleList, requestDict=requestDict, currentPayerName=payer.Name, currentPayerAddress=payerAddress)
+
+@app.route('/respond', methods=['POST'])
+@click.argument("respond")
+def repondToRequest():
+    request_id = request.form['requestId']
+    if request_id:
+        eligibilityRequest = insuranceDao.getEligibilityRequest(request_id)
+        if request.form.get('approved_check'):
+            eligibilityRequest.processed=True
+        else:
+            eligibilityRequest.processed=False
+        for key in request.form.keys():
+            app.logger.info("form key=" + key + "form value=" + request.form.get(key))
+        insuranceDao.saveEligibilityRequest(eligibilityRequest)
+        payerName = request.form.get("payer_name")
+        app.logger.info('payer name for respond - ' + request.form.get("payer_name"))
+        return redirect('/requests?payerselect='+payerName)
+    else:
+        abort(404, description="either invalid payer or invalid eligibility request")
 
 
 # The User page is accessible to authenticated users (users that have logged in)
@@ -170,10 +215,18 @@ def coverageDetail():
                 if benefit.id not in benefitMatchIds:
                     benefitMatchIds.append(benefit.id)
 
-
-        if (eligibilityRequest.coverage_option_1 and benefit_1) or (eligibilityRequest.coverage_option_2 and benefit_2) or (eligibilityRequest.coverage_option_3 and benefit_3):
             match_approve = True
-    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, eligibilityRequest=eligibilityRequest, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds)
+
+    # get all the historical eligilibility requests to show as badge
+    requestList = []
+    requestListSize = 0
+    if eligibilityRequest.patient_id in memberEligibilityRequestDict:
+        requestList =  memberEligibilityRequestDict[eligibilityRequest.patient_id]
+        requestListSize = len(requestList)
+    requestDate = eligibilityRequest.request_date.strftime("%m/%d/%Y")
+    eligibilityRequestList = insuranceDao.getAllEligiilityRequestsForPatientForPayer(eligibilityRequest.patient_id, eligibilityRequest.payer_id)
+
+    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds)
 
 
 @app.route("/")
