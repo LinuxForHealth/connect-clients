@@ -12,6 +12,7 @@ from fhir.resources.diagnosticreport import DiagnosticReport
 from fhir.resources.organization import Organization
 from fhir.resources.reference import Reference
 from fhir.resources.coverageeligibilityrequest import CoverageEligibilityRequest
+from fhir.resources.coverageeligibilityresponse import CoverageEligibilityResponse
 from fhir.resources.coverage import Coverage
 from fhir.resources.extension import Extension
 from fhir.resources.attachment import Attachment
@@ -622,41 +623,58 @@ class FhirConverters:
         @return: coverageEligibilityRequest
         @rtype: CoverageEligibilityRequest
         """
-        json_dict = {
-            "resourceType": "CoverageEligibilityResponse",
-            "id": eligibilityRequest.id,
-            "text": {
-                "status": "generated",
-                "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityResponse.</div>"
-            },
-            "identifier": [
-                {
-                    "system": "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse",
-                    "value": "881234"
-                }
-            ],
-            "status": "active",
-            "purpose": [
-                "validation"
-            ],
-            "patient": {
-                "reference": "Patient/pat1"
-            },
-            "created": "2014-08-16",
-            "request": {
-                "reference": "http://www.BenefitsInc.com/fhir/coverageeligibilityrequest/225476332402"
-            },
-            "outcome": "complete",
-            "disposition": "Policy is currently in-force.",
-            "insurer": {
-                "reference": "Organization/2"
-            },
-            "insurance": [
-                {
-                    "coverage": {
-                        "reference": "Coverage/9876B1"
-                    },
-                    "inforce": true
-                }
-            ]
-        }
+
+
+        def CoverageEligibilityResponseAsFhir(self, eligibilityRequest:EligibilityRequest, approve:bool, outcomeText:str)->CoverageEligibilityResponse:
+            """
+            returns the response to a CoverageEligibilityRequest, with the decision and approval (which makes up the outcome)
+            @param self:
+            @type self:
+            @param eligibilityRequest:
+            @type eligibilityRequest:  the entity that represents a CoverageEligibilityRequest
+            @param approve: approve
+            @type approve: the boolean of whether the request is approved
+            @param outcomeText: outcomeText
+            @type outcomeText: the reasoning behind the approve value
+            @return:
+            @rtype: CoverageEligibilityResponse
+            """
+
+            json_dict = {
+                "resourceType": "CoverageEligibilityResponse",
+                "id": eligibilityRequest.id,
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityResponse.</div>"
+                },
+                "identifier": [
+                    {
+                        "system": "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse",
+                        "value": "881234"
+                    }
+                ],
+                "status": "active",
+                "purpose": [
+                    "validation"
+                ],
+                "patient": {
+                    "reference": "Patient/pat1"
+                },
+                "created": "2014-08-16",
+                "request": {
+                    "reference": "http://www.BenefitsInc.com/fhir/coverageeligibilityrequest/225476332402"
+                },
+                "outcome": "complete",
+                "disposition": "Policy is currently in-force.",
+                "insurer": {
+                    "reference": "Organization/2"
+                },
+                "insurance": [
+                    {
+                        "coverage": {
+                            "reference": "Coverage/9876B1"
+                        },
+                        "inforce": True
+                    }
+                ]
+            }
