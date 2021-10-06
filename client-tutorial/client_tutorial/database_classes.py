@@ -349,6 +349,9 @@ class EligibilityRequestResponse(Base):
     payer_id = Column(ForeignKey('payer.id', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
     eligibility_request_id = Column(ForeignKey('eligibility_request.id', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
     value = Column(TINYINT(1), nullable=False, index=True)
+    outcome = Column(String(32), nullable=False, index=False)
+    disposition = Column(String(256), nullable=False, index=False)
+    comment = Column(String(2048), nullable=False, index=False)
     fhir_json = Column(String(2048), nullable=False)
 
     #FK links
