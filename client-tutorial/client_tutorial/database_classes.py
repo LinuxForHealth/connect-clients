@@ -750,3 +750,14 @@ class CoveragePlanData(Base):
     type = Column(String(256), nullable=False)
     value = Column(String(256), nullable=False)
     name = Column(VARCHAR(256))
+
+    def __str__(self):
+        elements = []
+        elements.append((self.__class__.__name__ + ': ').upper())
+        skip = False
+        for key, value in self.__dict__.items():
+            if skip:
+                elements.append("{key}='{value}'".format(key=key, value=value))
+            else:
+                skip = True
+        return ', '.join(elements)

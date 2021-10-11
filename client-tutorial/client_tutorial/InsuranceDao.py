@@ -169,3 +169,48 @@ class InsuranceDao:
         self.session.add(eligibilityRequest)
         self.session.commit()
         return eligibilityRequest
+
+    def getEligibilityRequestReponse(self, id:int)->EligibilityRequestResponse:
+        """
+        get an getEligibilityRequestReponse by id
+        @param id: the ID of the response record
+        @type id: int
+        @return: The request reponse for that id
+        @rtype: EligibilityRequestResponse
+        """
+        global session
+        return self.session.query(EligibilityRequestResponse).get(id)
+
+    def getEligibilityRequestReponsesForPatient(self, patientId:int) -> List[EligibilityRequestResponse]:
+        """
+        get an getEligibilityRequestReponse by id
+        @param id: the ID of the response record
+        @type id: int
+        @return: The request reponse for that id
+        @rtype: List[EligibilityRequestResponse]
+        """
+        global session
+        return self.session.query(EligibilityRequestResponse).filter(EligibilityRequestResponse.patient_id==patientId).all()
+
+
+    def getEligibilityRequestReponsesForPayer(self, payerId:int) -> List[EligibilityRequestResponse]:
+        """
+        get an getEligibilityRequestReponse by id of the payer
+        @param payerId: the ID of the payer
+        @type payerId: int
+        @return: The request reponses for that id
+        @rtype: List[EligibilityRequestResponse]
+        """
+        global session
+        return self.session.query(EligibilityRequestResponse).filter(EligibilityRequestResponse.payer_id==payerId).all()
+
+    def getResponseForEligibilityResponse(self, requestId:int) -> List[EligibilityRequestResponse]:
+        """
+        returns any eligibility request responses for a given request
+        @param requestId:
+        @type requestId:
+        @return: list of eligibility request reponses
+        @rtype:List[EligibilityRequestResponse]
+        """
+        global session
+        return self.session.query(EligibilityRequestResponse).filter(EligibilityRequestResponse.eligibility_request_id==requestId).all()
