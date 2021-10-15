@@ -247,13 +247,15 @@ class Patient(Base):
     religion = Column(String(32), nullable=False, index=True)
     marital_status = Column(String(64), nullable=False, index=True)
     insurance = Column(MEDIUMINT, nullable=False, index=True)
-    payer_id = Column(String(64), nullable=False, index=True)
+    payer_id = Column(ForeignKey('payer.id', ondelete='RESTRICT', onupdate='RESTRICT'), nullable=False, index=True)
     DOB = Column(Date, nullable=False, index=True)
     DOD = Column(Date)
     DOD_HOSP = Column(Date)
     EXPIRE_FLAG = Column(TINYINT, nullable=False, index=True)
     acd_study_patient = Column(TINYINT(1), nullable=False, index=True, server_default=text("'0'"))
     fhir_json = Column(JSON)
+
+    payer:Payer = relationship('Payer')
 
     def calculate_age(self) -> int:
         """
@@ -580,6 +582,8 @@ class LabEvent(Base):
     FLAG = Column(String(20))
     acd_study = Column(TINYINT(1), nullable=False, index=True, server_default=text("'0'"))
     fhir_json = Column(JSON)
+
+    labItem:DLabItem = relationship('DLabItem')
 
     def __str__(self):
         elements = []

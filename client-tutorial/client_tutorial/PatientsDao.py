@@ -51,8 +51,7 @@ class PatientsDao:
         @return: the text description
         @rtype: str
         """
-        payer: Payer = self.insuranceDao.getPayerDict()[patient.insurance]
-        return f'Patient: {patient.last_name}, {patient.first_name}\nMRN: {patient.SUBJECT_ID}\nInsurance: {payer.Name} {payer.plan_type}\nDOB: {patient.DOB.strftime("%m/%d/%Y")} ({patient.calculate_age()})\n\n{patient.street}, {patient.city} {patient.state} {patient.zip}'
+        return f'Patient: {patient.last_name}, {patient.first_name}\nMRN: {patient.SUBJECT_ID}\nInsurance: {patient.payer.Name} {patient.payer.plan_type}\nDOB: {patient.DOB.strftime("%m/%d/%Y")} ({patient.calculate_age()})\n\n{patient.street}, {patient.city} {patient.state} {patient.zip}'
 
     def savePatient(self, patient:Patient)->Patient:
         """

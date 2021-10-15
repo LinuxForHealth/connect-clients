@@ -24,6 +24,7 @@ class setup():
         config = configparser.ConfigParser()
         config.read('nlp.ini')
         config.sections()
+        print(config['NLP_ENGINE']['NLP_URL'])
         service = acd.AnnotatorForClinicalDataV1(
         authenticator=IAMAuthenticator(apikey=config['NLP_ENGINE']['APIKEY']),
         version=config['NLP_ENGINE']['API_VERSION']

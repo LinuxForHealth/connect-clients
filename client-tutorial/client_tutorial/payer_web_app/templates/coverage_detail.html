@@ -13,7 +13,7 @@
             <li class="breadcrumb-item">
                 <a href="requests?payerselect=xxx">Payer</a>
             </li>
-            <li class="breadcrumb-item active"> <a href="/requests?payerselect=xxx">Coverage</a></li>
+            <li class="breadcrumb-item active"> <a href="/requests?payerselect={{payer.Name}}">Coverage</a></li>
             <li class="breadcrumb-item active">Details</li>
             <!-- Breadcrumb Menu-->
         </ol>
@@ -39,7 +39,7 @@
             </tr>
             <tr>
                 <td><strong>Requestor</strong></td>
-                <td>{{ eligibilityRequest.requestor_name }}</td>
+                <td>{{ eligibilityRequest.requestor_name }} (mrn: {{ patient.SUBJECT_ID }})</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
@@ -78,10 +78,11 @@
                     {% if coverageOption['name'] %}
                         <td> {{ coverageOption['name'] }} </td>
                         {% if coverageOption['id'] in benefitMatchIds %}
-                            <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
+                            <td>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
                                     <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
-
-</svg>                         </td>
+                    </svg>
+                    </td>
                         {% else %}
                             <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
                                   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -102,9 +103,8 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
-            {% for coverageOption in coverage['coveragePlanData'] %}            </tr>
-        </table>
             {% endfor %}
+        </table>
 
             {% if eligibilityRequest.coverage_option_1 or eligibilityRequest.coverage_option_2 or eligibilityRequest.coverage_option_3 %}
                 <h4>Additional Benefit Searches</h4>
@@ -130,6 +130,31 @@
         1: {{ benefit_1 }}
         2: {{ benefit_2 }}
         3: {{ benefit_3 }}
+
+        {% if problemList %}
+            <h4>Clinical Data known from the clinical notes:</h4>
+            <ol>
+            {% for problemItem in ProblemList %}
+                <li> {{ problemItem.name - ({{ problemItem.icd_code }}) }}</li>
+                {% if problemItem.getMedicationsForProblem() %}
+                <p>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMeds" aria-expanded="false" aria-controls="collapseMeds">
+                        Button with data-bs-target
+                    </button>
+                </p>
+                <div class="collapse" id="collapseMeds">
+                    <div class="card card-body">
+                        <ul>
+                            {% for problemMedication in problemItem.getMedicationsForProblem() %}
+                                <li> {{ problemMedication.name }} {{ problemMedication.description }} </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif}
+            {% endfor %}
+            </ol>
+        {% endif %}
 
         <form action="/respond" id="request-approval-form" method="post">
             <input type="hidden" id="requestId" name="requestId" value="{{ eligibilityRequest.id }}">
@@ -158,6 +183,19 @@
         </form>
 
 
+        <form action="/graph" id="labgraphform" method="get">
+        <input type="hidden" id="subjectId" name="subjectid" value="{{ patient.SUBJECT_ID }}">
+            <input type="hidden" id="coverageId" name="coverageId" value="{{ eligibilityRequest.id }}">
+        <div class="mb-3">
+            <h3>View Labs for prior-auth</h3>
+            <select class="form-select" aria-label="select lab to graph" name="labnamesearch" id="labnamesearch">
+                {% for dLabItem in fullLabInfo %}
+                    <option value="{{ dLabItem[0] }}">{{ dLabItem[1] }}</option>
+               {% endfor %}
+           </select>
+        </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
 
     </div>
 </div>

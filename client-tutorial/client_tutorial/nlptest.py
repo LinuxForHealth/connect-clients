@@ -15,8 +15,12 @@ patientDao = PatientsDao()
 noteEvent = noteEventDao.getNoteEventById(noteId)
 patient: Patient = patientDao.getPatient(noteEvent.SUBJECT_ID)
 print(patientDao.getPatientSummary(patient))
-author:Caregiver = adtDao.getCareGiverForCGID(noteEvent.CGID)
-print('NOTE TYPE: %s\nWritten By: %s, %s' % (noteEvent.DESCRIPTION, author.last_name, author.first_name))
+print('NoteEvent: '+str(noteEvent.ROW_ID))
+if noteEvent.CGID:
+    author:Caregiver = adtDao.getCareGiverForCGID(noteEvent.CGID)
+    print('NOTE TYPE: %s\nWritten By: %s, %s' % (noteEvent.DESCRIPTION, author.last_name, author.first_name))
+else:
+    print('NOTE TYPE: %s\nWritten By: Unknown Authors' % (noteEvent.DESCRIPTION))
 print('-------------------------------------')
 print("PROBLEMS FOUND IN ASSESSMENT AND PLAN:")
 for problemListItem in nlpAnalyzer.getProblemListItemsFromNoteText(noteEvent.TEXT,'henry_test_cartridge_v1.0_aap_test_flow'):

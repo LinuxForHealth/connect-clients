@@ -1,22 +1,25 @@
 #  Copyright (c) 2021 IBM Corporation
 #  Henry Feldman, MD (CMO Development, IBM Watson Health)
-from datetime import datetime
-import os
 
-from flask import Flask, redirect, session, request, abort, url_for, flash, send_from_directory, jsonify, render_template_string, render_template, jsonify
-from flask_sqlalchemy import SQLAlchemy
-import click
-from flask_wtf.csrf import CSRFProtect
-from flask_session import Session
-from ..InsuranceDao import InsuranceDao
-from typing import List
-from ..database_classes import Patient, Payer, PatientCoverage
-from ..PatientsDao import PatientsDao
-from typing import TypedDict, List
-import uuid
-import secrets
 import logging
+import secrets
 from logging.config import dictConfig
+from typing import List
+
+import click
+import urllib.parse
+from flask import Flask, redirect, request, abort, render_template, jsonify
+from flask_session import Session
+from flask_wtf.csrf import CSRFProtect
+
+from ..nlp_analyzer import Nlp_Analyzer
+from ..nlp_setup import setup
+
+from LabDao import LabDao
+from ..InsuranceDao import InsuranceDao
+from ..PatientsDao import PatientsDao
+from ..NoteEventDao import NoteEventDao
+from ..database_classes import Payer, PatientCoverage, DLabItem, LabEvent, ProblemListItem, Noteevent
 
 
 logging.basicConfig(filename='flask_app.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
@@ -24,6 +27,9 @@ logging.basicConfig(filename='flask_app.log', level=logging.DEBUG, format=f'%(as
 csrf_protect = CSRFProtect()
 
 insuranceDao:InsuranceDao = InsuranceDao()
+labDao:LabDao = LabDao()
+analyzer:Nlp_Analyzer = Nlp_Analyzer()
+nlp_setup:setup = setup()
 
 payerDict = insuranceDao.fetchPayerDict()
 payerNameDict = {}
@@ -49,6 +55,7 @@ dictConfig({
 
 app = Flask(__name__)
 patientDao: PatientsDao = PatientsDao()
+noteEventDao:NoteEventDao = NoteEventDao()
 print(secret_key)
 # app.config['SECRET_KEY'] = secret_key
 app.config['WTF_CSRF_ENABLED'] = False
@@ -226,8 +233,35 @@ def coverageDetail():
     requestDate = eligibilityRequest.request_date.strftime("%m/%d/%Y")
     eligibilityRequestList = insuranceDao.getAllEligiilityRequestsForPatientForPayer(eligibilityRequest.patient_id, eligibilityRequest.payer_id)
 
-    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds)
+    fullLabInfo = []
+    dLabItemList:List[str] = []
+    for lab in labDao.getLabsForPatient(patient.SUBJECT_ID):
+        if lab.labItem.LABEL not in dLabItemList:
+            dLabItemList.append(lab.labItem.LABEL)
+            labTuple = (lab.labItem.ROW_ID, lab.labItem.LABEL)
+            fullLabInfo.append(labTuple)
 
+    problemList:List[ProblemListItem] = getProblemsFromNotes(patient.SUBJECT_ID)
+
+    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo, problemList=problemList)
+
+#94196
+
+def getProblemsFromNotes(self, subejctId:int)->List[ProblemListItem]:
+    """
+    gets the list of problems via ACD in the patient's notes (for prior auth/or other claims processing)
+    @param self:
+    @type self:
+    @param subejctId: the patient's subject_id
+    @type subejctId: int
+    @return: the list of found active problems in the notes
+    @rtype: List[ProblemListItem]
+    """
+    problemsList:List[ProblemListItem] = []
+    service = nlp_setup.setup()
+    for noteEvent in noteEventDao.getAllNotesForPatient(subejctId):
+        problemsList.extend(analyzer.getProblemListItemsFromNoteText(noteEvent.TEXT))
+    return problemsList
 
 @app.route("/")
 def default():
@@ -237,3 +271,38 @@ def default():
 def hello():
     patient = patientDao.getPatient(959595)
     return patient.__str__()
+
+@app.route('/labnames', methods=['GET'])
+def getLabNames():
+    labItems:List[DLabItem] = labDao.searchDLabItems(request.args.get('labnamesearch'))
+
+@app.route('/graph', methods=['GET'])
+def grapher():
+    subjectId = request.args.get('subjectId')
+    subjectId = 397
+    coverageId = request.args.get('coverageId')
+    labItemId = request.args.get('labnamesearch')
+    labItemId = 50983
+    labsForPatient =  labDao.getSpecificLabForPatient(subjectId, labItemId)
+
+    logging.info('searching for lab: '+ str(labItemId) +' for patient '+str(subjectId))
+    #dbpatient.DOB.strftime("%Y-%m-%d")
+    labels:List[str] = []
+    values = []
+    for labs in labsForPatient:
+        labels.append(labs.CHARTTIME.strftime("%Y-%m-%d"))
+        values.append(labs.VALUE)
+        logging.info("Lab "+ labs.CHARTTIME.strftime("%Y-%m-%d"))
+    legend = None
+    title = None
+
+    if labsForPatient:
+        legend = labsForPatient[0].VALUEUOM
+        title = labsForPatient[0].labItem.LABEL + ': '+labsForPatient[0].labItem.FLUID
+    else:
+        legend = "No Labs Found"
+        title = "unknown lab selected"
+    #    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo)
+
+    #logging.info('got '+str(len(labsForPatient))+ ' labs for patient '+subjectId)
+    return render_template('labgraph.html', legend=legend, values=values, labels=labels, coverageId=coverageId, title=title)

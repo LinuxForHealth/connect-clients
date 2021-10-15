@@ -1,5 +1,5 @@
-from .databaseUtil import DatabaseUtil
-from .database_classes import Caregiver, Admission, DRGCode, DiagnosisIcd, DIcdDiagnoses, CPTEvent, DCPT, Hospital
+from databaseUtil import DatabaseUtil
+from database_classes import Caregiver, Admission, DRGCode, DiagnosisIcd, DIcdDiagnoses, CPTEvent, DCPT, Hospital
 from sqlalchemy import select
 from typing import List, TypedDict
 
@@ -61,6 +61,7 @@ class AdtDao:
         @rtype: Caregiver
         """
         global session
+        print('CGID: '+str(CGID))
         return self.session.query(Caregiver).filter(Caregiver.CGID==CGID).one()
 
 

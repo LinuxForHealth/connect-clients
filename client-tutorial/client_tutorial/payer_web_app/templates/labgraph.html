@@ -1,0 +1,60 @@
+<!--
+  ~ Copyright (c) 2021 IBM Corporation
+  ~ Henry Feldman, MD (CMO Development, IBM Watson Health)
+  -->
+{% extends "dark_layout.html" %}
+
+{% block content %}
+<!--
+  ~ Copyright (c) 2021 IBM Corporation
+  ~ Henry Feldman, MD (CMO Development, IBM Watson Health)
+  -->
+
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item">
+                <a href="requests?payerselect=xxx">Payer</a>
+            </li>
+            <li class="breadcrumb-item active"> <a href="/requests?payerselect=xxx">Coverage</a></li>
+            <li class="breadcrumb-item active">Details</li>
+            <!-- Breadcrumb Menu-->
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="card" style="width: 850px">
+            <div class="card-body">
+                <h5 class="card-title">{{ title }}</h5>
+                <canvas id="myChart" width="800" height="600"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ labels | safe }},
+            datasets: [{
+                label: '{{ legend }}',
+                data: {{ values | safe }},
+                tension: .25,
+                borderColor: 'rgb(75, 192, 192)',
+             }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+    <form action="/coveragedetail" id="labgraphform" method="get">
+        <input type="hidden" id="coverageId" name="coverageId" value="{{ coverageId }}">
+        <button type="submit" class="btn btn-primary">Return to Coverage Request</button>
+    </form></div>
+{% endblock %}
