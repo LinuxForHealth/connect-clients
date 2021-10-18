@@ -35,7 +35,7 @@ class DatabaseUtil():
 
         settings = get_settings()
         logging.basicConfig()
-        print('DATABASEUTIL FROM CONFIG: ' + settings.tutorial_mysql_url)
+        # print('DATABASEUTIL FROM CONFIG: ' + settings.tutorial_mysql_url)
         # turn this off in production as it will drive us crazy
         #logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
         # note I added the pool_pre_ping to prevent flask from timing out server connections via a stale pool state.

@@ -241,13 +241,15 @@ def coverageDetail():
             labTuple = (lab.labItem.ROW_ID, lab.labItem.LABEL)
             fullLabInfo.append(labTuple)
 
-    problemList:List[ProblemListItem] = getProblemsFromNotes(patient.SUBJECT_ID)
+    subjectId: int = patient.SUBJECT_ID
+    logging.info("coverageDetail: Analyzing problems for patient "+ str(subjectId))
+    problemList:List[ProblemListItem] = getProblemsFromNotes(subjectId)
 
     return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo, problemList=problemList)
 
 #94196
 
-def getProblemsFromNotes(self, subejctId:int)->List[ProblemListItem]:
+def getProblemsFromNotes(self, subjectId:int)->List[ProblemListItem]:
     """
     gets the list of problems via ACD in the patient's notes (for prior auth/or other claims processing)
     @param self:
@@ -257,9 +259,9 @@ def getProblemsFromNotes(self, subejctId:int)->List[ProblemListItem]:
     @return: the list of found active problems in the notes
     @rtype: List[ProblemListItem]
     """
+    logging.info("getProblemsFromNotes: Analyzing problems for patient "+ str(subjectId))
     problemsList:List[ProblemListItem] = []
-    service = nlp_setup.setup()
-    for noteEvent in noteEventDao.getAllNotesForPatient(subejctId):
+    for noteEvent in noteEventDao.getAllNotesForPatient(subjectId):
         problemsList.extend(analyzer.getProblemListItemsFromNoteText(noteEvent.TEXT))
     return problemsList
 

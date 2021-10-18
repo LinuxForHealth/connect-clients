@@ -21,7 +21,6 @@ class Nlp_Analyzer():
         """
         # get a dictionary of reponse, temporary patch for missing attribute API item
         attribute_dict = concept._to_dict()
-        print(attribute_dict['insightModelData']['procedure'])
         #print('INSIGHT: %s' % (attribute_dict['insightModelData']['medication']['startedEvent']['score']))
         actionPotentials: List[MedicationActionPotential] = []
         actions = Names()
@@ -96,7 +95,8 @@ class Nlp_Analyzer():
                     medication.rxnorm_id = attribute.rx_norm_id
                     medication.negated = attribute.negated
                     medication.cui = attribute.snomed_concept_id
-                    medication.action = self.getActionForMedicationConcept(attribute)
+                    if attribute._to_dict()['insightModelData'].has_key('medication'):
+                        medication.action = self.getActionForMedicationConcept(attribute)
                     # check for duplicated med names, a common issue when the same term is repeated many time
                     problemListItem.getMedicationsForProblem().append(medication)
                     #print('added %s to %a' %(medication.name, problemListItem.name))
