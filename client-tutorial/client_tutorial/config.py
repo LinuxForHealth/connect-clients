@@ -20,8 +20,6 @@ class Settings(BaseSettings):
     # test server: 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/kafkaFhirDemoDb'
     tutorial_mysql_url: str = 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/mimiciiiv14'
 
-    print("CONFIG VALUE: "+tutorial_mysql_url)
-
     #this is the patient id for all the tutorial clinical data
     tutorial_subject_id:int = 959595
 

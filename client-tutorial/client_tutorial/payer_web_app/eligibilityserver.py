@@ -26,6 +26,8 @@ logging.basicConfig(filename='flask_app.log', level=logging.DEBUG, format=f'%(as
 
 csrf_protect = CSRFProtect()
 
+nlpName = 'henry_test_cartridge_v1.0_aap_test_flow'
+
 insuranceDao:InsuranceDao = InsuranceDao()
 labDao:LabDao = LabDao()
 analyzer:Nlp_Analyzer = Nlp_Analyzer()
@@ -56,7 +58,6 @@ dictConfig({
 app = Flask(__name__)
 patientDao: PatientsDao = PatientsDao()
 noteEventDao:NoteEventDao = NoteEventDao()
-print(secret_key)
 # app.config['SECRET_KEY'] = secret_key
 app.config['WTF_CSRF_ENABLED'] = False
 
@@ -242,14 +243,14 @@ def coverageDetail():
             fullLabInfo.append(labTuple)
 
     subjectId: int = patient.SUBJECT_ID
-    logging.info("coverageDetail: Analyzing problems for patient "+ str(subjectId))
-    problemList:List[ProblemListItem] = getProblemsFromNotes(subjectId)
+    # logging.info("coverageDetail: Analyzing problems for patient "+ str(subjectId))
+    problemList:List[ProblemListItem] = getProblemsFromNotes(subjectId, nlpName)
 
     return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo, problemList=problemList)
 
 #94196
 
-def getProblemsFromNotes(self, subjectId:int)->List[ProblemListItem]:
+def getProblemsFromNotes(subjectId:int, nlpName:str)->List[ProblemListItem]:
     """
     gets the list of problems via ACD in the patient's notes (for prior auth/or other claims processing)
     @param self:
@@ -259,10 +260,10 @@ def getProblemsFromNotes(self, subjectId:int)->List[ProblemListItem]:
     @return: the list of found active problems in the notes
     @rtype: List[ProblemListItem]
     """
-    logging.info("getProblemsFromNotes: Analyzing problems for patient "+ str(subjectId))
+    # logging.info("getProblemsFromNotes: Analyzing problems for patient "+ str(subjectId))
     problemsList:List[ProblemListItem] = []
     for noteEvent in noteEventDao.getAllNotesForPatient(subjectId):
-        problemsList.extend(analyzer.getProblemListItemsFromNoteText(noteEvent.TEXT))
+        problemsList.extend(analyzer.getProblemListItemsFromNoteText(noteEvent.TEXT, nlpName))
     return problemsList
 
 @app.route("/")
