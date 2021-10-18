@@ -21,6 +21,7 @@ class Nlp_Analyzer():
         """
         # get a dictionary of reponse, temporary patch for missing attribute API item
         attribute_dict = concept._to_dict()
+        print(attribute_dict['insightModelData']['procedure'])
         #print('INSIGHT: %s' % (attribute_dict['insightModelData']['medication']['startedEvent']['score']))
         actionPotentials: List[MedicationActionPotential] = []
         actions = Names()
@@ -79,7 +80,7 @@ class Nlp_Analyzer():
             listItem: bool = False
             for attribute in attribute_values:
                 if attribute.name == 'Diagnosis' and attribute.covered_text not in problemDuplicate:
-                    # print('doing diagnosis: %s'%{attribute.covered_text})
+                    print('doing diagnosis: %s in section %s' %(attribute.covered_text, attribute.section_normalized_name))
                     listItem = True
                     if attribute.disambiguation_data.validity == 'VALID' and attribute.section_normalized_name == 'Assessment and plan':
                         problemListItem = ProblemListItem()
@@ -89,7 +90,7 @@ class Nlp_Analyzer():
                         problemListItem.icd_code = attribute.icd10_code
                         #problemListItem.medications = []
                         problemItemList.append(problemListItem)
-                if attribute.name == 'PrescribedMedication' and ProblemListItem != None and attribute.section_normalized_name == 'Assessment and plan':
+                if attribute.name == 'PrescribedMedication' and ProblemListItem != None and attribute.section_normalized_name == 'Assessment and plan' or attribute.section_normalized_name == 'A/P':
                     medication: ProblemMedication = ProblemMedication()
                     medication.name = attribute.preferred_name
                     medication.rxnorm_id = attribute.rx_norm_id
