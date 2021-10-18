@@ -6,6 +6,7 @@ from PatientsDao import PatientsDao
 from ADTDao import AdtDao
 from ADTDao import AdtDao
 from database_classes import ProblemListItem, ProblemProcedure, ProblemMedication
+from config import get_settings
 
 noteId:int = 314537
 noteEventDao = NoteEventDao()
@@ -15,6 +16,8 @@ patientDao = PatientsDao()
 noteEvent = noteEventDao.getNoteEventById(noteId)
 patient: Patient = patientDao.getPatient(noteEvent.SUBJECT_ID)
 print(patientDao.getPatientSummary(patient))
+settings = get_settings()
+
 print('NoteEvent: '+str(noteEvent.ROW_ID))
 if noteEvent.CGID:
     author:Caregiver = adtDao.getCareGiverForCGID(noteEvent.CGID)
@@ -23,7 +26,7 @@ else:
     print('NOTE TYPE: %s\nWritten By: Unknown Authors' % (noteEvent.DESCRIPTION))
 print('-------------------------------------')
 print("PROBLEMS FOUND IN ASSESSMENT AND PLAN:")
-for problemListItem in nlpAnalyzer.getProblemListItemsFromNoteText(noteEvent.TEXT,'henry_test_cartridge_v1.0_aap_test_flow'):
+for problemListItem in nlpAnalyzer.getProblemListItemsFromNoteText(noteEvent.TEXT,settings.flow_name):
     print('\n\nDIAGNOSIS: %s ICD10: %s  SNOMED: %s' % (problemListItem.name, problemListItem.icd_code, problemListItem.cui))
     if len(problemListItem.getMedicationsForProblem()) > 0:
         print('\tMEDICATIONS:')

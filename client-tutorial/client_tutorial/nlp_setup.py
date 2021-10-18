@@ -14,8 +14,8 @@ class setup():
         settings = get_settings()
 
         service = acd.AnnotatorForClinicalDataV1(
-        IAMAuthenticator(settings.NLP_APIKEY,
-        settings.NLP_API_VERSION))
+        IAMAuthenticator(settings.nlp_apikey,
+        settings.nlp_version))
 
-        service.set_service_url(settings.NLP_URL)
+        service.set_service_url(settings.nlp_url)
         return service
