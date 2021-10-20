@@ -13,9 +13,9 @@ class setup():
         # we use a config file (called nlp.ini) to read in the NLP config
         settings = get_settings()
 
-        service = acd.AnnotatorForClinicalDataV1(
-        IAMAuthenticator(settings.nlp_apikey,
-        settings.nlp_version))
+        authenticator = IAMAuthenticator(apikey=settings.nlp_apikey)
+
+        service = acd.AnnotatorForClinicalDataV1(version=settings.nlp_version, authenticator=authenticator)
 
         service.set_service_url(settings.nlp_url)
         return service

@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     """
 
     nlp_apikey = 'EiKq_KEsTNyJTk9CcxOB4jhMgvwyt-hpQqKpRcdSEnlE'
-    nlp_version='version=2020-06-01'
+    nlp_version='2020-06-01'
     nlp_url = 'https://us-east.wh-acd.cloud.ibm.com/wh-acd/api'
     nlp_module_name = 'henry_test_cartridge'
     nlp_type = 'ACD'

@@ -127,35 +127,21 @@
             </ul>
             {% endif %}
         </table>
-        1: {{ benefit_1 }}
-        2: {{ benefit_2 }}
-        3: {{ benefit_3 }}
 
+        <div class="col-md-6 .offset-md-2">
+        <h4>Additional plan benefits</h4>
+        <ol>
+            <li>{{ benefit_1 }}</li>
+            <li>{{ benefit_2 }}</li>
+            <li>{{ benefit_3 }}</li>
+        </ol>
         {% if problemList %}
-            <h4>Clinical Data known from the clinical notes:</h4>
+        <h4>Clinical Data known from the clinical notes</h4>
             <ol>
-            {% for problemItem in ProblemList %}
-                <li> {{ problemItem.name - ({{ problemItem.icd_code }}) }}</li>
-                {% if problemItem.getMedicationsForProblem() %}
-                <p>
-                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMeds" aria-expanded="false" aria-controls="collapseMeds">
-                        Button with data-bs-target
-                    </button>
-                </p>
-                <div class="collapse" id="collapseMeds">
-                    <div class="card card-body">
-                        <ul>
-                            {% for problemMedication in problemItem.getMedicationsForProblem() %}
-                                <li> {{ problemMedication.name }} {{ problemMedication.description }} </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                {% endif}
-            {% endfor %}
+                {{ listHtml|safe }}
             </ol>
         {% endif %}
-
+         </div>
         <form action="/respond" id="request-approval-form" method="post">
             <input type="hidden" id="requestId" name="requestId" value="{{ eligibilityRequest.id }}">
             <input type="hidden" id="payer_name" name="payer_name" value="{{ payer['Name'] }}">

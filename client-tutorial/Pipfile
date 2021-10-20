@@ -23,5 +23,6 @@ flask-wtf = "*"
 mypy = "*"
 pymysql = "*"
 python-dotenv = "*"
+cryptography = "*"
 
 [dev-packages]

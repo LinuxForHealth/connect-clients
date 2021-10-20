@@ -4,6 +4,7 @@
 import logging
 import secrets
 from logging.config import dictConfig
+from pprint import pprint
 from typing import List
 
 import click
@@ -20,13 +21,15 @@ from ..InsuranceDao import InsuranceDao
 from ..PatientsDao import PatientsDao
 from ..NoteEventDao import NoteEventDao
 from ..database_classes import Payer, PatientCoverage, DLabItem, LabEvent, ProblemListItem, Noteevent
+from config import get_settings
 
 
 logging.basicConfig(filename='flask_app.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 csrf_protect = CSRFProtect()
 
-nlpName = 'henry_test_cartridge_v1.0_aap_test_flow'
+settings = get_settings()
+
 
 insuranceDao:InsuranceDao = InsuranceDao()
 labDao:LabDao = LabDao()
@@ -244,27 +247,30 @@ def coverageDetail():
 
     subjectId: int = patient.SUBJECT_ID
     # logging.info("coverageDetail: Analyzing problems for patient "+ str(subjectId))
-    problemList:List[ProblemListItem] = getProblemsFromNotes(subjectId, nlpName)
-
-    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo, problemList=problemList)
+    problemList:List[ProblemListItem] = analyzer.getProblemsFromNotes(subjectId, settings.flow_name)
+    problemNameList:List[str] = []
+    print('PROBLEM LIST')
+    listHtml:str = ''
+    for item in problemList:
+        if item and item.name and item.icd_code:
+            problemNameList.append('<li>'+item.name + ' - ('+item.icd_code+')</li>')
+            if item.medicationsForProblem:
+                problemNameList.append('<h5>Medications for problem</h5>')
+                problemNameList.append('<ul>')
+                for medication in item.medicationsForProblem:
+                    problemNameList.append('<li>'+medication.name+'</li>')
+                problemNameList.append('</ul>')
+            if item.procedures:
+                problemNameList.append('<h5>Procedures for problem</h5>')
+                problemNameList.append('<ul>')
+                for procedure in item.procedures:
+                    problemNameList.append('<li>'+procedure.name+'</li>')
+                problemNameList.append('</ul>')
+    listHtml = '\n'.join(problemNameList)
+    print('listhtml: '+listHtml)
+    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo, problemList=problemList, listHtml=listHtml)
 
 #94196
-
-def getProblemsFromNotes(subjectId:int, nlpName:str)->List[ProblemListItem]:
-    """
-    gets the list of problems via ACD in the patient's notes (for prior auth/or other claims processing)
-    @param self:
-    @type self:
-    @param subejctId: the patient's subject_id
-    @type subejctId: int
-    @return: the list of found active problems in the notes
-    @rtype: List[ProblemListItem]
-    """
-    # logging.info("getProblemsFromNotes: Analyzing problems for patient "+ str(subjectId))
-    problemsList:List[ProblemListItem] = []
-    for noteEvent in noteEventDao.getAllNotesForPatient(subjectId):
-        problemsList.extend(analyzer.getProblemListItemsFromNoteText(noteEvent.TEXT, nlpName))
-    return problemsList
 
 @app.route("/")
 def default():
