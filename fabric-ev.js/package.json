@@ -1,5 +1,5 @@
 {
-    "name": "fabric-demo",
+    "name": "fabric-ev",
     "version": "0.0.1",
     "description": "sends a eligibility check transaction to a blockchain",
     "main": "server.js",

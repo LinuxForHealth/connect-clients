@@ -1,17 +1,17 @@
-# fabric-demo.js
-fabric-demo.js is a Node.js Hyperledger Fabric blockchain client that sends FHIR CoverageEligibilityRequest messages to the eligibility@1.0.0.tar.gz contract.  fabric-demo has both a REST API and a NATS subscriber for LinuxForHealth sync messages, which provide two methods of sending data to the blockchain.
+# fabric-ev.js
+fabric-ev.js is a Node.js Hyperledger Fabric blockchain client that sends FHIR CoverageEligibilityRequest messages to the eligibility@1.0.0.tar.gz contract for health insurance eligibility verification.  fabric-ev.js has both a REST API and a NATS subscriber for LinuxForHealth sync messages, which provide two methods of obtaining data for eligibility verification.
 
 ## Pre-requisites
-fabric-demo.js requires Node.js and a Hyperledger Fabric instance to connect to.  
+fabric-ev.js requires Node.js and a Hyperledger Fabric instance to connect to.  
 - Install [Node.js](https://nodejs.org)
   
-If you don't have a Hyperledger Fabric instance and would like to install the Hyperledger Fabric test-network on your local machine, you can follow the "Test with test-network" instructions below.
+If you don't have a Hyperledger Fabric instance and would like to install the Hyperledger Fabric test-network on your local machine, you can follow the [Test with test-network](#test-with-test-network) instructions below.
 
 ## Clone connect-clients
 ```shell
 git clone https://github.com/LinuxForHealth/connect-clients.git
 ```
-The connect-clients/fabric-demo.js directory contains eligibility@1.0.0.tar.gz which is a Hyperledger Fabric Typescript contract for storing FHIR-R4 Patient records in the blockchain.  Install this contract in your Hyperledger Fabric network, or follow the instructions below to install it in a test-network instance.
+The connect-clients/fabric-ev.js directory contains eligibility@1.0.0.tar.gz which is a Hyperledger Fabric Typescript contract for performing eligibility verification the blockchain.  Install this contract in your Hyperledger Fabric network, or follow the instructions below to install it in a test-network instance.
 
 ## Test with test-network
 The fabric client can be tested using a local Hyperledger Fabric test-network instance.  Follow the steps below to set up test-network on your local machine.
@@ -28,8 +28,8 @@ cd fabric-samples/test-network
 ### Copy the contract and install script to the test-network
 Copy the contract and install script to the test-network directory.  The contract will be installed in later step.
 ```shell
-cp <connect-clients-path>/connect-clients/fabric-demo.js/eligibility@1.0.0.tar.gz .
-cp <connect-clients-path>/connect-clients/fabric-demo.js/install_contract.sh .
+cp <connect-clients-path>/connect-clients/fabric-ev.js/eligibility@1.0.0.tar.gz .
+cp <connect-clients-path>/connect-clients/fabric-ev.js/install_contract.sh .
 ```
 
 ### Add the peer binaries to your path
@@ -50,12 +50,12 @@ Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Ap
 ```
 
 ## Configure the client
-Copy your connection json to your connect-clients/fabric-demo.js/conf directory.  Example for test-network:
+Copy your connection json to your connect-clients/fabric-ev.js/conf directory.  Example for test-network:
 ```shell
 cd test-network
-cp organizations/peerOrganizations/org1.example.com/connection-org1.json <connect-clients-path>/connect-clients/fabric-demo.js/conf
+cp organizations/peerOrganizations/org1.example.com/connection-org1.json <connect-clients-path>/connect-clients/fabric-ev.js/conf
 ```
-You can also edit the fabric-demo.js config.json in fabric-demo.js/conf and adjust the settings for your fabric, but you should be able to use the configuration with test-network without changes.  Please see the table below if you do need to make changes:
+You can also edit the fabric-ev.js config.json in fabric-ev.js/conf and adjust the settings for your fabric, but you should be able to use the configuration with test-network without changes.  Please see the table below if you do need to make changes:
 
 | Setting | Example | Description |
 | ------- | ------- | ----------- |
@@ -80,8 +80,8 @@ You can also edit the fabric-demo.js config.json in fabric-demo.js/conf and adju
 
 ## Start the client
 ```shell
-cd connect-clients/fabric-demo.js
+cd connect-clients/fabric-ev.js
 node.js server.js
 ```
 
-That's it - you're ready to send FHIR data transactions to the fabric-demo.js REST API and store them in your blockchain!
+That's it - you're ready to send FHIR data transactions to the fabric-ev.js REST API and perform eligibility verification via your blockchain!
