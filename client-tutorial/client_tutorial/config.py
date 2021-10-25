@@ -26,8 +26,8 @@ class Settings(BaseSettings):
     cartridges_content_type = 'application/octet-stream'
     flow_name = 'henry_test_cartridge_v1.0_aap_test_flow'
 
-    # test server: 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/kafkaFhirDemoDb'
-    tutorial_mysql_url: str = 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/mimiciiiv14'
+    # test server: 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/lfh_demo_db'
+    tutorial_mysql_url: str = 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/lfh_demo_db'
 
     #this is the patient id for all the tutorial clinical data
     tutorial_subject_id:int = 959595

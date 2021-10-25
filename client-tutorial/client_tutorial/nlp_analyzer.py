@@ -92,7 +92,7 @@ class Nlp_Analyzer():
                     if attribute.name and attribute.name == 'Diagnosis' and attribute.covered_text not in problemDuplicate:
                         # print('doing diagnosis: %s in section %s' %(attribute.covered_text, attribute.section_normalized_name))
                         listItem = True
-                        if attribute.disambiguation_data.validity == 'VALID' and ('assessment' in attribute.section_normalized_name.lower() or 'plan' in attribute.section_normalized_name.lower() or 'discharge' in attribute.section_normalized_name.lower()):
+                        if attribute.disambiguation_data.validity == 'VALID' and ('assessment' in attribute.section_normalized_name.lower() or 'plan' in attribute.section_normalized_name.lower()):
                             problemListItem = ProblemListItem()
                             problemDuplicate.append(attribute.covered_text)
                             problemListItem.name = attribute.covered_text

@@ -19,8 +19,8 @@
         </ol>
     </nav>
     <div class="row">
-        <h2>Coverage Details for patient:</h2>
-        <h3>Selected Payer: {{ payer['Name'] }}</h3>
+        <h1 class="display-2">Coverage Details for patient:</h1>
+        <h1  class="display-3">Selected Payer: {{ payer['Name'] }}</h1>
         <table class="table table-borderless">
                 <tr>
                     <td>&nbsp;</td>
@@ -91,9 +91,14 @@
                         {% endif %}
                     {% endif %}
             </tr>
+            {% endfor %}
             <tr>
                 <td><strong>Purpose:</strong></td>
-                <td>{{ eligibilityRequest.request_purpose }}</td>
+                {% if eligibilityRequest.request_purpose == 'auth-requirements'%}
+                    <td>{{ eligibilityRequest.request_purpose }} <span class="badge bg-warning text-dark">Prior Auth</span></td>
+                {% else %}
+                   <td>{{ eligibilityRequest.request_purpose }}</td>
+                {% endif%}
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
@@ -129,14 +134,14 @@
         </table>
 
         <div class="col-md-6 .offset-md-2">
-        <h4>Additional plan benefits</h4>
+        <h1 class="display-4">Additional plan benefits</h1>
         <ol>
             <li>{{ benefit_1 }}</li>
             <li>{{ benefit_2 }}</li>
             <li>{{ benefit_3 }}</li>
         </ol>
         {% if problemList %}
-        <h4>Clinical Data known from the clinical notes</h4>
+            <h4>Clinical Data known from the clinical notes <span class="badge bg-warning text-dark">Prior Auth</span></h4>
             <ol>
                 {{ listHtml|safe }}
             </ol>
@@ -145,7 +150,7 @@
         <form action="/respond" id="request-approval-form" method="post">
             <input type="hidden" id="requestId" name="requestId" value="{{ eligibilityRequest.id }}">
             <input type="hidden" id="payer_name" name="payer_name" value="{{ payer['Name'] }}">
-            <h3>Approve Eligibility Request</h3>
+            <h1 class="display-3">Approve Eligibility Request</h1>
             <div class="row">
             {% if match_approve %}
             <div class="input-group mb-3">
@@ -173,7 +178,7 @@
         <input type="hidden" id="subjectId" name="subjectid" value="{{ patient.SUBJECT_ID }}">
             <input type="hidden" id="coverageId" name="coverageId" value="{{ eligibilityRequest.id }}">
         <div class="mb-3">
-            <h3>View Labs for prior-auth</h3>
+            <h3>View Labs for prior-auth <span class="badge bg-warning text-dark">Prior Auth</span></h3>
             <select class="form-select" aria-label="select lab to graph" name="labnamesearch" id="labnamesearch">
                 {% for dLabItem in fullLabInfo %}
                     <option value="{{ dLabItem[0] }}">{{ dLabItem[1] }}</option>
