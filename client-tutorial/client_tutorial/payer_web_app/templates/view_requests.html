@@ -29,6 +29,7 @@
     <th scope=""col">Member First</th>
     <th scope=""col">Member Last</th>
     <th scope=""col">Plan/Coverage</th>
+    <th scope=""col">Request Type</th>
     <th scope=""col">Coverage Detail</th>
     </thead>
     <tbody>
@@ -38,6 +39,7 @@
       <td>{{ tuple.0.first_name }}</td>
       <td>{{ tuple.0.last_name }}</td>
       <td>{{ tuple.1.payer_plan_id }} </td>
+      <td>{{ requestDict[tuple.1.member_id][0].request_service_type }}</td>
       <td>
           {% if tuple.0.acd_study_patient==1: %}
               {% if tuple.1.member_id in requestDict and requestDict[tuple.1.member_id]|count > 1 %}

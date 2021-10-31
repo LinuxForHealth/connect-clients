@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     flow_name = 'henry_test_cartridge_v1.0_aap_test_flow'
 
     # test server: 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/lfh_demo_db'
-    tutorial_mysql_url: str = 'mysql+pymysql://credentialuser:dxbcamel@192.168.1.24:3306/lfh_demo_db'
+    tutorial_mysql_url: str = 'mysql+pymysql://credentialuser:dxbcamel@localhost:3306/mimiciiiv14'
 
     #this is the patient id for all the tutorial clinical data
     tutorial_subject_id:int = 959595

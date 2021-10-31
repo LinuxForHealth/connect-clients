@@ -249,7 +249,7 @@ def coverageDetail():
     # logging.info("coverageDetail: Analyzing problems for patient "+ str(subjectId))
     problemList:List[ProblemListItem] = analyzer.getProblemsFromNotes(subjectId, settings.flow_name)
     problemNameList:List[str] = []
-    print('PROBLEM LIST')
+    logging.info('coverage-detail: pulling problem lists')
     listHtml:str = ''
     for item in problemList:
         if item and item.name and item.icd_code:
@@ -267,7 +267,7 @@ def coverageDetail():
                     problemNameList.append('<li>'+procedure.name+'</li>')
                 problemNameList.append('</ul>')
     listHtml = '\n'.join(problemNameList)
-    print('listhtml: '+listHtml)
+    #print('listhtml: '+listHtml)
     return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo, problemList=problemList, listHtml=listHtml)
 
 #94196
