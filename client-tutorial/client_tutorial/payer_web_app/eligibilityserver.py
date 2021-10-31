@@ -290,7 +290,8 @@ def coverageDetail():
                 problemNameList.append('</ul>')
     listHtml = '\n'.join(problemNameList)
     #print('listhtml: '+listHtml)
-    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo, problemList=problemList, listHtml=listHtml)
+    mrnValue = str(patient.SUBJECT_ID).zfill(8)
+    return render_template('coverage_detail.html', coverage=coverage, patient=patient, payer=payer, requestDate=requestDate, eligibilityRequest=eligibilityRequest, requestList=requestList, requestListSize=requestListSize, benefit_1=benefit_1, benefit_2=benefit_2, benefit_3=benefit_3, match_approve=match_approve, benefitMatchIds=benefitMatchIds, fullLabInfo=fullLabInfo, problemList=problemList, listHtml=listHtml, mrnValue=mrnValue)
 
 #94196
 
