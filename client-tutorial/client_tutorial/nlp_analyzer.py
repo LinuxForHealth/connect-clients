@@ -39,7 +39,7 @@ class Nlp_Analyzer():
         highestProbActionItem:MedicationActionPotential = actionPotentials[-1]
         return highestProbActionItem
 
-    def getProblemListItemsFromNoteText(self, textToAnalyze: str, nlpModuleName: str) -> List[ProblemListItem]:
+    def getProblemListItemsFromNoteText(self, textToAnalyze: str, nlpModuleName: str, noteEventId: int) -> List[ProblemListItem]:
         """
         takes text from a NoteEvent object and returns a list of ProblemListItems. The way this works is assuming a full
         progress note with sections (such as "Assessment and Plan" which is then analyzed for bullet lists of
@@ -67,7 +67,7 @@ class Nlp_Analyzer():
             end = 0
             sectionList: List[acd.Section] = response.sections
             for section in sectionList:
-                if section.trigger.section_normalized_name == 'Assessment and plan':
+                if section.trigger.section_normalized_name == 'Assessment and plan' or section.trigger.section_normalized_name == 'Brief Hospital Course':
                     # lets cut the text out for this section. We need to add 1 character to the start since there is normally a colon at the end
                     if len(sectionList) == sectionCounter:
                         # this is the last section, important as otherwise we would run off the end of the text
@@ -94,6 +94,7 @@ class Nlp_Analyzer():
                         listItem = True
                         if attribute.disambiguation_data.validity == 'VALID' and ('assessment' in attribute.section_normalized_name.lower() or 'plan' in attribute.section_normalized_name.lower()):
                             problemListItem = ProblemListItem()
+                            problemListItem.note_event_id = noteEventId
                             problemDuplicate.append(attribute.covered_text)
                             problemListItem.name = attribute.covered_text
                             problemListItem.cui = attribute.snomed_concept_id
@@ -145,6 +146,6 @@ class Nlp_Analyzer():
         global problemItemList
         # logging.info("getProblemsFromNotes: Analyzing problems for patient "+ str(subjectId))
         for noteEvent in self.noteEventDao.getAllNotesForPatient(subjectId):
-            self.getProblemListItemsFromNoteText(noteEvent.TEXT, nlpName)
+            self.getProblemListItemsFromNoteText(noteEvent.TEXT, nlpName, noteEvent.ROW_ID)
             #print('note id: '+str(noteEvent.ROW_ID))
         return self.problemItemList

@@ -16,12 +16,13 @@ from flask_wtf.csrf import CSRFProtect
 from ..nlp_analyzer import Nlp_Analyzer
 from ..nlp_setup import setup
 
-from LabDao import LabDao
+from ..LabDao import LabDao
+from ..ADTDao import AdtDao
 from ..InsuranceDao import InsuranceDao
 from ..PatientsDao import PatientsDao
 from ..NoteEventDao import NoteEventDao
-from ..database_classes import Payer, PatientCoverage, DLabItem, LabEvent, ProblemListItem, Noteevent
-from config import get_settings
+from ..database_classes import Payer, PatientCoverage, DLabItem, LabEvent, ProblemListItem, Noteevent, Caregiver
+from ..config import get_settings
 
 
 logging.basicConfig(filename='flask_app.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
@@ -33,6 +34,7 @@ settings = get_settings()
 
 insuranceDao:InsuranceDao = InsuranceDao()
 labDao:LabDao = LabDao()
+adtDao:AdtDao = AdtDao()
 analyzer:Nlp_Analyzer = Nlp_Analyzer()
 nlp_setup:setup = setup()
 
@@ -145,6 +147,26 @@ def payer_list():
         payerNames.append(payer.Name)
     return render_template('payer_base.html', payerNames = payerNames)
 
+@app.route('/noteDetail', methods=['GET'])
+def noteDetail():
+    coverageId:int = request.args.get("coverageId")
+    payerName:str = request.args.get("payerName")
+    noteEventId:int = request.args.get("noteEventId")
+
+    noteEvent:Noteevent = noteEventDao.getNoteEventById(noteEventId)
+
+    authorName: str = None
+
+    if noteEvent.CGID:
+        author:Caregiver = adtDao.getCareGiverForCGID(noteEvent.CGID)
+        authorName = author.last_name + ", "+ author.first_name
+    else:
+        authorName = 'Unavailable'
+
+    if not noteEvent:
+        abort(500)
+    return render_template('note_view.html', coverageId=coverageId, payerName=payerName, noteEvent=noteEvent, authorName=authorName)
+
 @app.route('/coveragedetail', methods=['GET'])
 def coverageDetail():
     global payerDict
@@ -253,7 +275,7 @@ def coverageDetail():
     listHtml:str = ''
     for item in problemList:
         if item and item.name and item.icd_code:
-            problemNameList.append('<li>'+item.name + ' - ('+item.icd_code+')</li>')
+            problemNameList.append('<li> <a href="/noteDetail?coverageId='+coverageId+'&payerName='+payer.Name+'&noteEventId='+ str(item.note_event_id)+'">'+item.name + '</a> - ('+item.icd_code+')</li>')
             if item.medicationsForProblem:
                 problemNameList.append('<h5>Medications for problem</h5>')
                 problemNameList.append('<ul>')

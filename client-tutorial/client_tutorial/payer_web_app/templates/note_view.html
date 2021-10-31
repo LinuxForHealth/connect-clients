@@ -1,0 +1,25 @@
+{% extends "dark_layout.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item">
+                <a href="requests?payerselect=xxx">Payer</a>
+            </li>
+            <li class="breadcrumb-item active"> <a href="/requests?payerselect={{payerName}}">Coverage</a></li>
+            <li class="breadcrumb-item active"><a href="/coveragedetail?coverageId={{coverageId}}">Details</a></li>
+            <li class="breadcrumb-item active">Clinical Note</li>
+            <!-- Breadcrumb Menu-->
+        </ol>
+    </nav>
+   <div class="row">
+
+        <H2>Note: {{ noteEvent.CATEGORY }} {{ noteEvent.DESCRIPTION}}</H2>
+        <b>Author: </b> {{ authorName }}
+
+       <pre>{{ noteEvent.TEXT }}</pre>
+</div>
+
+{% endblock %}
