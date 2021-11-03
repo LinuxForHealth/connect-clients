@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+bluebutton="python bluebutton/main.py"
+check-format="black -t py38 --check --diff connect tests"
+format="black -t py38 connect tests"
+
+[packages]
+fastapi = "*"
+pyaml = "*"
+requests = "*"
+"fhir.resources" = "*"
+httpx = "*"
+slowapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+wheel = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-asyncio = "*"
+flake8 = "*"
+black = {extras = ["d"], version = "*"}
+pre-commit = "*"
+
+[pipenv]
+allow_prereleases = true
